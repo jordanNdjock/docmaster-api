@@ -10,15 +10,10 @@ class CreateAdminsTable extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('prenom');
-            $table->string('initial_2_prenom')->nullable();
-            $table->string('nom_famille');
+            $table->string('nom_utilisateur');
             $table->string('email')->unique();
-            $table->string('password');
+            $table->string('mdp');
             $table->string('tel')->nullable();
-            $table->date('date_naissance')->nullable();
-            $table->text('infos_paiement')->nullable();
-            $table->string('code')->nullable();
             $table->boolean('supprime')->default(false);
             $table->timestamps();
         });

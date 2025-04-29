@@ -11,7 +11,7 @@ class CreateDocumentsTable extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('nature_id');
+            $table->uuid('type_document_id');
             $table->uuid('user_id');
             $table->text('contenu');
             $table->boolean('trouve')->default(false);
@@ -20,7 +20,7 @@ class CreateDocumentsTable extends Migration
             $table->boolean('supprime')->default(false);
             $table->timestamps();
 
-            $table->foreign('nature_id')->references('id')->on('natures');
+            $table->foreign('type_document_id')->references('id')->on('types_documents');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

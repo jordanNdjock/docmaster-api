@@ -11,7 +11,7 @@ class LoginRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,8 +22,21 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'    => 'required|string|unique:users,email',
-            'password' => 'required|string|min:8',
+            'nom_utilisateur' => 'required|string|max:50|unique:users,nom_utilisateur',
+            'email'    => 'required|email|max:255|unique:users,email',
+            'mdp' => 'required|string|min:8|confirmed',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'nom_utilisateur.required' => 'Le nom d’utilisateur est requis.',
+            'email.required'    => 'L\'adresse email est requise.',
+            'email.unique'      => 'Cette adresse email est déjà utilisée.',
+            'mdp.required' => 'Le mot de passe est requis.',
+            'mdp.min'      => 'Le mot de passe doit comporter au moins 8 caractères.',
+            'mdp.confirmed'=> 'La confirmation du mot de passe ne correspond pas.',
         ];
     }
 }

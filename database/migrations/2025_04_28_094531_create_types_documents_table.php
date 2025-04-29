@@ -1,31 +1,27 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateParametresTable extends Migration
+class CreateTypesDocumentsTable extends Migration
 {
     public function up()
     {
-        Schema::create('parametres', function (Blueprint $table) {
+        Schema::create('types_documents', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('nature_id');
+            $table->string('titre');
+            $table->string('libelle');
             $table->double('frais');
             $table->double('recompense');
-            $table->integer('trouver')->default(0);
-            $table->integer('rechercher')->default(0);
-            $table->integer('remis')->default(0);
+            $table->boolean('validite')->default(false);
+            $table->date('date_expiration')->nullable();
             $table->boolean('supprime')->default(false);
             $table->timestamps();
-
-            $table->foreign('nature_id')->references('id')->on('natures');
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('parametres');
+        Schema::dropIfExists('types_documents');
     }
 }
-

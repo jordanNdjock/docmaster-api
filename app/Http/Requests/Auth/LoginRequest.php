@@ -24,7 +24,7 @@ class LoginRequest extends FormRequest
         return [
             'nom_utilisateur' => 'required|string|max:50|unique:users,nom_utilisateur',
             'email'    => 'required|email|max:255|unique:users,email',
-            'mdp' => 'required|string|min:8|confirmed',
+            'mdp' => 'required|string|min:8',
         ];
     }
 
@@ -36,7 +36,6 @@ class LoginRequest extends FormRequest
             'email.unique'      => 'Cette adresse email est déjà utilisée.',
             'mdp.required' => 'Le mot de passe est requis.',
             'mdp.min'      => 'Le mot de passe doit comporter au moins 8 caractères.',
-            'mdp.confirmed'=> 'La confirmation du mot de passe ne correspond pas.',
         ];
     }
 }

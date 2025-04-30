@@ -36,7 +36,6 @@ class LoginRequest extends FormRequest
             'nom_utilisateur.max'      => 'Le nom d’utilisateur ne doit pas dépasser 50 caractères.',
             'nom_utilisateur.exists'   => 'Ce nom d’utilisateur n\'existe pas dans notre base de données.',
             'email.required'    => 'L\'adresse email est requise.',
-            'email.unique'      => 'Cette adresse email est déjà utilisée.',
             'email.email'       => 'L\'adresse email doit être valide.',
             'email.max'         => 'L\'adresse email ne doit pas dépasser 255 caractères.',
             'email.exists'      => 'Cette adresse email n\'existe pas dans notre base de données.',

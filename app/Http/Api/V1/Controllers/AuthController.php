@@ -5,16 +5,24 @@ namespace App\Http\Api\V1\Controllers;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\UserResource;
-use App\Models\User;
+use App\Services\Auth\LogoutService;
+use App\Services\Auth\LoginService;
+use App\Services\Auth\RegisterService;
 use App\Traits\ApiResponse;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Hash;
-use OpenApi\Annotations as OA; 
+use OpenApi\Annotations as OA;
 
 class AuthController extends Controller
 {
     use ApiResponse;
+
+    public function __construct(
+        protected LogoutService $logoutService,
+        protected LoginService $loginService,
+        protected RegisterService $registerService
+    ) {}
 
    /**
      * @OA\Post(
@@ -59,19 +67,11 @@ class AuthController extends Controller
         $credentials = $request->validated();
         try {
 
-            $user = User::where('email', $credentials['email'])->first();
-
-            if (! $user || ! Hash::check($credentials['mdp'], $user->mdp)) {
-                return $this->sendError(
-                    'Identifiants invalides.',
-                    [],
-                    401
-                );
-            }
-
-            $plainTextToken = $user
-                ->createToken("access_token of {$user->email}")
-                ->plainTextToken;
+            ['user' => $user, 'token' => $plainTextToken] =
+            $this->loginService->authenticate(
+                $credentials['email'],
+                $credentials['mdp']
+            );
 
             return $this->sendResponse(
                 [
@@ -81,18 +81,28 @@ class AuthController extends Controller
                 'Connexion réussie.',
             );
 
-        }catch (\Throwable $th) {
+        } catch (AuthenticationException $e) {
+            return $this->sendError(
+                $e->getMessage(),
+                [],
+                401
+            );
+        } catch (\Throwable $th) {
             return $this->sendError('Erreur interne lors de la connexion.', ['error' => $th->getMessage()], 500);
         }
     }
 
+
+
     public function register(RegisterRequest $request){
+        $credentials = $request->validated();
         try {
-            //code...
         } catch (\Throwable $th) {
-            //throw $th;
+            return $this->sendError('Erreur interne lors de la création du compte.', ['error' => $th->getMessage()], 500);
         }
     }
+
+
 
     /**
      * @OA\Post(
@@ -118,33 +128,30 @@ class AuthController extends Controller
      * )
      */
 
-
      public function logout(Request $request): JsonResponse
      {
-         $user = $request->user();
-         if (! $user) {
-             return $this->sendError(
-                 'Non authentifié.',
-                 [],
-                 401
-             );
-         }
-     
-         try {
-             $user->currentAccessToken()->delete();
-     
-             return $this->sendResponse(
-                 null,
-                 'Déconnexion réussie !',
-                 200
-             );
-         } catch (\Throwable $th) {
-             return $this->sendError(
-                 'Erreur lors de la déconnexion.',
-                 ['errors' => $th->getMessage()],
-                 500
-             );
-         }
+        try {
+            $this->logoutService->logout($request->user());
+
+            return $this->sendResponse(
+                null,
+                'Déconnexion réussie !',
+                200
+            );
+
+        } catch (AuthenticationException $e) {
+            return $this->sendError(
+                $e->getMessage(),
+                [],
+                401
+            );
+        } catch (\Throwable $th) {
+            return $this->sendError(
+                'Erreur lors de la déconnexion.',
+                ['error' => $th->getMessage()],
+                500
+            );
+        }
      }
      
 }

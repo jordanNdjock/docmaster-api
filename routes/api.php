@@ -10,9 +10,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'throttle:10,1'], function () 
 });
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-    //Autres fonctions de l'auth
-    Route::group(['prefix' => 'auth'], function () {
-        Route::post('logout', [AuthController::class, 'logout']);
-    });
+
+    Route::post('auth/logout', [AuthController::class, 'logout']);
 });
 

@@ -20,7 +20,7 @@
                 "tags": [
                     "Authentification"
                 ],
-                "summary": "Authentification d'un utilisateur",
+                "summary": "Authentification d'un utilisateur et retour d'un accès token",
                 "operationId": "19aa8d21ff383791040be577bd780348",
                 "requestBody": {
                     "required": true,
@@ -28,12 +28,16 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
+                                    "nom_utilisateur": {
+                                        "type": "string",
+                                        "example": "testuser"
+                                    },
                                     "email": {
                                         "type": "string",
                                         "format": "email",
                                         "example": "user@example.com"
                                     },
-                                    "password": {
+                                    "mdp": {
                                         "type": "string",
                                         "example": "secret123"
                                     }
@@ -54,13 +58,21 @@
                                             "type": "boolean",
                                             "example": true
                                         },
-                                        "access_token": {
-                                            "type": "string",
-                                            "example": "eyJ0eXAiOiJKV1Qi..."
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "$ref": "#/components/schemas/User"
+                                                },
+                                                "access_token": {
+                                                    "type": "string",
+                                                    "example": "1|gChmEahrYbZLpZMOdxCmokA0ntqqtwaXTokCkeHld7172a26"
+                                                }
+                                            },
+                                            "type": "object"
                                         },
-                                        "token_type": {
+                                        "message": {
                                             "type": "string",
-                                            "example": "Bearer"
+                                            "example": "Connexion réussie."
                                         }
                                     },
                                     "type": "object"
@@ -72,9 +84,128 @@
                         "description": "Identifiants invalides"
                     },
                     "500": {
-                        "description": "Erreur serveur"
+                        "description": "Erreur interne du serveur"
                     }
                 }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Déconnexion de l'utilisateur",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "3f1d0e5acee73e3339171b663c5df47e",
+                "responses": {
+                    "200": {
+                        "description": "Déconnexion réussie",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Déconnexion réussie !"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "title": "User",
+                "description": "Représentation d'un utilisateur",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "550e8400-e29b-41d4-a716-446655440000"
+                    },
+                    "nom_famille": {
+                        "type": "string",
+                        "example": "Doe"
+                    },
+                    "prenom": {
+                        "type": "string",
+                        "example": "Joseph"
+                    },
+                    "nom_utilisateur": {
+                        "type": "string",
+                        "example": "testuser"
+                    },
+                    "initial_2_prenom": {
+                        "type": "string",
+                        "example": "JD"
+                    },
+                    "tel": {
+                        "type": "string",
+                        "example": "1234567890"
+                    },
+                    "date_naissance": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2000-01-01"
+                    },
+                    "infos_paiement": {
+                        "type": "string",
+                        "example": "Test payment info"
+                    },
+                    "localisation": {
+                        "type": "string",
+                        "example": "Test location"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "user@example.com"
+                    },
+                    "code_invitation": {
+                        "type": "string",
+                        "example": "TESTCODE"
+                    },
+                    "supprime": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-30T08:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-04-30T08:00:00Z"
+                    }
+                },
+                "type": "object"
             }
         }
     },

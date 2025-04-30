@@ -16,17 +16,18 @@ class AuthController extends Controller
 {
     use ApiResponse;
 
-      /**
+   /**
      * @OA\Post(
      *   path="/api/auth/login",
      *   tags={"Authentification"},
-     *   summary="Authentification d'un utilisateur",
+     *   summary="Authentification d'un utilisateur et retour d'un accès token",
      *
      *   @OA\RequestBody(
      *     required=true,
      *     @OA\JsonContent(
-     *       @OA\Property(property="email",    type="string", format="email", example="user@example.com"),
-     *       @OA\Property(property="password", type="string", example="secret123")
+     *       @OA\Property(property="nom_utilisateur", type="string", example="testuser"),
+     *       @OA\Property(property="email", type="string", format="email", example="user@example.com"),
+     *       @OA\Property(property="mdp",   type="string", example="secret123")
      *     )
      *   ),
      *
@@ -35,12 +36,22 @@ class AuthController extends Controller
      *     description="Connexion réussie",
      *     @OA\JsonContent(
      *       @OA\Property(property="success", type="boolean", example=true),
-     *       @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1Qi..."),
+     *       @OA\Property(
+     *         property="data", type="object",
+     *         @OA\Property(
+     *           property="user", 
+     *           type="object",
+     *           description="Détails de l'utilisateur authentifié",
+     *           ref="#/components/schemas/User"
+     *         ),
+     *         @OA\Property(property="access_token", type="string", example="1|gChmEahrYbZLpZMOdxCmokA0ntqqtwaXTokCkeHld7172a26")
+     *       ),
+     *       @OA\Property(property="message", type="string", example="Connexion réussie.")
      *     )
      *   ),
      *
      *   @OA\Response(response=401, description="Identifiants invalides"),
-     *   @OA\Response(response=500, description="Erreur serveur")
+     *   @OA\Response(response=500, description="Erreur interne du serveur")
      * )
      */
 
@@ -50,7 +61,7 @@ class AuthController extends Controller
 
             $user = User::where('email', $credentials['email'])->first();
 
-            if (! $user || ! Hash::check($credentials['password'], $user->password)) {
+            if (! $user || ! Hash::check($credentials['mdp'], $user->mdp)) {
                 return $this->sendError(
                     'Identifiants invalides.',
                     [],
@@ -83,9 +94,30 @@ class AuthController extends Controller
         }
     }
 
-     /**
-     * Déconnexion : supprime le token courant.
+    /**
+     * @OA\Post(
+     *   path="/api/auth/logout",
+     *   tags={"Authentification"},
+     *   summary="Déconnexion de l'utilisateur",
+     *   description="Nécessite un token Bearer dans l'en-tête Authorization",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Déconnexion réussie",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=true),
+     *       @OA\Property(property="data", type="object", example={}),
+     *       @OA\Property(property="message", type="string", example="Déconnexion réussie !")
+     *     )
+     *   ),
+     *   @OA\Response(response=401, description="Non authentifié"),
+     *   @OA\Response(response=500, description="Erreur interne du serveur")
+     * )
      */
+
 
      public function logout(Request $request): JsonResponse
      {

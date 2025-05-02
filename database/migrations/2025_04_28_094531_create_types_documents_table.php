@@ -10,7 +10,7 @@ class CreateTypesDocumentsTable extends Migration
         Schema::create('types_documents', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('titre');
-            $table->string('libelle');
+            $table->string('libelle')->nullable();
             $table->double('frais');
             $table->double('recompense');
             $table->boolean('validite')->default(false);

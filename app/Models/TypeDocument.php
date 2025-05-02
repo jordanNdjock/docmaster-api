@@ -13,6 +13,10 @@ class TypeDocument extends Model
     protected $keyType    = 'string';
     protected $fillable   = ['id', 'titre', 'libelle', 'frais','recompense', 'validite','date_expiration', 'supprime'];
 
+    protected $hidden = [
+        'supprime'
+    ];
+
     protected static function booted()
     {
         static::creating(fn($m) => $m->id = (string) Str::uuid());
@@ -22,4 +26,14 @@ class TypeDocument extends Model
     {
         return $this->hasMany(Document::class);
     }
+
+     public function scopeActive($query)
+     {
+         return $query->where('supprime', false);
+     }
+ 
+     public function scopeDeleted($query)
+     {
+         return $query->where('supprime', true);
+     }
 }

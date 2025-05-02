@@ -1,7 +1,6 @@
 <?php
 namespace App\Services;
 
-use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\DB;
@@ -72,7 +71,7 @@ class AuthServices
             ->plainTextToken;
 
         return [
-            'user'  => UserResource::make($user),
+            'user'  => $user,
             'token' => $token,
         ];
     }

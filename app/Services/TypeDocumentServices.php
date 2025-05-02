@@ -120,7 +120,8 @@ class TypeDocumentServices
                 'id'           => $typeDocument->id,
                 'titre'        => $typeDocument->titre,
                 'deleted_by'   => auth('admin')->user() ? auth('admin')->user()->email : 'unknown',
-            ]);          });
+            ]);          
+        });
     }
 
     public function getArchivedTypeDocuments(int $perPage = 10, ?int $page = null): array

@@ -41,14 +41,20 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
      */
     Route::post('auth/logout', [AdminController::class, 'logout']);
 
+
     /**
      * Gestion des types de documents
      */
-    Route::apiResource('type-document', TypeDocumentController::class)
-        ->only(['index', 'show', 'store', 'update', 'destroy']);
     Route::post('type-document/{id}/restore', [TypeDocumentController::class, 'restore']);
     Route::delete('type-document/{id}/force-delete', [TypeDocumentController::class, 'forceDelete']);
-    Route::get('type-document/archived', [TypeDocumentController::class, 'archived']); 
+    Route::get('type-document/archived', [TypeDocumentController::class, 'archived']);
+    Route::apiResource('type-document', TypeDocumentController::class)
+        ->only(['index', 'show', 'store', 'update', 'destroy']);
+
+    /**
+     * Gestion des documents
+     */
     
+
 });
 

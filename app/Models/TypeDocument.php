@@ -32,7 +32,7 @@ class TypeDocument extends Model
          return $query->where('supprime', false);
      }
  
-     public function scopeDeleted($query)
+     public function scopeInactive($query)
      {
          return $query->where('supprime', true);
      }

@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Http\Api\V1\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Resources\UserResource;
-use App\Services\Auth\LogoutService;
-use App\Services\Auth\LoginService;
-use App\Services\Auth\RegisterService;
+use App\Services\AuthServices;
 use App\Traits\ApiResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
@@ -19,9 +16,7 @@ class AuthController extends Controller
     use ApiResponse;
 
     public function __construct(
-        protected LogoutService $logoutService,
-        protected LoginService $loginService,
-        protected RegisterService $registerService
+        protected AuthServices $authServices,
     ) {}
 
    /**
@@ -68,14 +63,14 @@ class AuthController extends Controller
         try {
 
             ['user' => $user, 'token' => $plainTextToken] =
-            $this->loginService->authenticate(
+            $this->authServices->authenticate(
                 $credentials['email'],
                 $credentials['mdp']
             );
 
             return $this->sendResponse(
                 [
-                    'user'         => UserResource::make($user),
+                    'user'         => $user,
                     'access_token' => $plainTextToken,
                 ],
                 'Connexion réussie.',
@@ -131,7 +126,7 @@ class AuthController extends Controller
      public function logout(Request $request): JsonResponse
      {
         try {
-            $this->logoutService->logout($request->user());
+            $this->authServices->logout($request->user());
 
             return $this->sendResponse(
                 null,

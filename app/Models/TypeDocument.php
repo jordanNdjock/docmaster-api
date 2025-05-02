@@ -5,9 +5,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Type_Document extends Model
+class TypeDocument extends Model
 {
     use HasFactory;
+    public $table      = 'types_documents';
     public $incrementing = false;
     protected $keyType    = 'string';
     protected $fillable   = ['id', 'titre', 'libelle', 'frais','recompense', 'validite','date_expiration', 'supprime'];

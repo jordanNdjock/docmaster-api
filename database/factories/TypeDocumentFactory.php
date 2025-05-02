@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Type_Document>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TypeDocument>
  */
 class TypeDocumentFactory extends Factory
 {
@@ -17,7 +17,14 @@ class TypeDocumentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'id' => $this->faker->uuid(),
+            'titre' => $this->faker->sentence(),
+            'libelle' => $this->faker->sentence(),
+            'frais' => $this->faker->randomFloat(2, 0, 100),
+            'recompense' => $this->faker->randomFloat(2, 0, 100),
+            'validite' => $this->faker->boolean(50),
+            'date_expiration' => $this->faker->dateTimeBetween('now', '+2 years'),
+            'supprime' => false,
         ];
     }
 }

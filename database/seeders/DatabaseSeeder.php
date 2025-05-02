@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
+use App\Models\TypeDocument;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(1)->create();
+        TypeDocument::factory(1)->create();
 
         User::factory()->create([
             'nom_famille' => 'Test',
@@ -31,5 +33,13 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
             'remember_token' => 'testtoken',
          ]);
+        
+        Admin::factory()->create([
+            'nom_utilisateur' => 'Admin',
+            'mdp' => 'adminpassword',
+            'tel' => '+23790998778',
+            'email' => 'admin@example.com',
+            'supprime' => false,
+        ]);
     }
 }

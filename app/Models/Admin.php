@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
 
 class Admin extends Model
 {
+    use HasFactory, HasApiTokens;
     public $incrementing = false;
     public $keyType = 'string';
 
@@ -15,5 +18,14 @@ class Admin extends Model
     protected static function booted()
     {
         static::creating(fn($m) => $m->id = (string) Str::uuid());
+    }
+
+    protected $hidden = [
+        'mdp',
+    ];
+    public function casts(){
+        return [
+            'mdp' => 'hashed',
+        ];
     }
 }

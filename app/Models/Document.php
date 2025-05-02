@@ -20,9 +20,9 @@ class Document extends Model
         static::creating(fn($m) => $m->id = (string) Str::uuid());
     }
 
-    public function nature()
+    public function type_document()
     {
-        return $this->belongsTo(Nature::class);
+        return $this->belongsTo(TypeDocument::class);
     }
     
     public function user()

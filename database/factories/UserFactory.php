@@ -34,7 +34,7 @@ class UserFactory extends Factory
             'infos_paiement' => fake()->text(),
             'localisation' => fake()->address(),
             'code_invitation' => fake()->word(),
-            'supprime' => fake()->boolean(),
+            'supprime' => false,
             'initial_2_prenom' => fake()->name(),
             'email_verified_at' => now(),
             'mdp' => static::$password ??= Hash::make('password'),

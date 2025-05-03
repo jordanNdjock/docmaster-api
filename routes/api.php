@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\TypeDocumentController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::apiResource('type-document', TypeDocumentController::class)
         ->only(['index', 'show']);
+
+    /**
+     * Gestion des documents
+     */
+    Route::get('documents', [DocumentController::class, 'indexUser']);
 });
 
 
@@ -48,13 +54,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::post('type-document/{id}/restore', [TypeDocumentController::class, 'restore']);
     Route::delete('type-document/{id}/force-delete', [TypeDocumentController::class, 'forceDelete']);
     Route::get('type-document/archived', [TypeDocumentController::class, 'archived']);
-    Route::apiResource('type-document', TypeDocumentController::class)
-        ->only(['index', 'show', 'store', 'update', 'destroy']);
+    Route::apiResource('type-document', TypeDocumentController::class);
 
     /**
      * Gestion des documents
      */
-    
+    Route::apiresource('document', DocumentController::class);
 
 });
 

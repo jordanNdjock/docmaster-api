@@ -128,7 +128,7 @@ class TypeDocumentServices
     {
         $page = $page ?: Paginator::resolveCurrentPage();
 
-        $paginator = TypeDocument::inactive()
+        $paginator = TypeDocument::archived()
         ->paginate(
             $perPage, 
             ['*'],

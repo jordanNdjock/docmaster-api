@@ -30,6 +30,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * Gestion des documents
      */
     Route::get('documents', [DocumentController::class, 'indexUser']);
+    Route::apiresource('document', DocumentController::class)
+        ->only(['store', 'update', 'destroy', 'show']);
 });
 
 

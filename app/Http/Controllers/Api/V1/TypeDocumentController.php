@@ -28,7 +28,7 @@ class TypeDocumentController
 
         return $this->sendResponse(
             [
-            'data' => $typeDocuments['data'],
+            'type_documents' => $typeDocuments['data'],
             'meta' => $typeDocuments['meta']
             ],
             'Liste des types de documents récupérée avec succès.'
@@ -45,7 +45,7 @@ class TypeDocumentController
         try {
             $typeDocument = $this->typeDocumentServices->createTypeDocument($validatedData);
             return $this->sendResponse(
-                ['data' => $typeDocument],
+                $typeDocument,
                 'Type de document créé avec succès.'
             );
         } catch (\Exception $e) {
@@ -61,7 +61,7 @@ class TypeDocumentController
         try {
             $typeDoc = $this->typeDocumentServices->getTypeDocumentById($id);
             return $this->sendResponse(
-                ['data' => $typeDoc],
+                $typeDoc,
                 'Type de document recupéré avec succès.'
             );
         } catch (ModelNotFoundException $e) {
@@ -79,7 +79,7 @@ class TypeDocumentController
         try {
             $typeDocument = $this->typeDocumentServices->updateTypeDocument($id, $validatedData);
             return $this->sendResponse(
-                ['data' => $typeDocument],
+                $typeDocument,
                 'Type de document mis à jour avec succès.'
             );
         } catch (ModelNotFoundException $e) {
@@ -154,7 +154,7 @@ class TypeDocumentController
 
         return $this->sendResponse(
             [
-            'data' => $typeDocuments['data'],
+            'archived_type_documents' => $typeDocuments['data'],
             'meta' => $typeDocuments['meta']
             ],
             'Liste des types de documents supprimés récupérée avec succès.'

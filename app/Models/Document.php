@@ -15,6 +15,10 @@ class Document extends Model
         'signale', 'supprime'
     ];
 
+    protected $hidden = [
+        "supprime",
+    ];
+
     protected static function booted()
     {
         static::creating(fn($m) => $m->id = (string) Str::uuid());

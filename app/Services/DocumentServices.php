@@ -5,6 +5,9 @@ namespace App\Services;
 use App\Models\Document;
 use App\Traits\ApiResponse;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentServices
 {
@@ -62,23 +65,68 @@ class DocumentServices
         ];
     }
 
-    public function createDocument(array $data)
+    public function getDocumentById(string $id)
     {
-        // Logique pour créer un document
+        return Document::active()->findOrFail($id);
     }
 
-    public function updateDocument(string $id, array $data)
+    public function createDocument(array $data, string $path): Document
     {
-        // Logique pour mettre à jour un document
+        return DB::transaction(function () use ($data, $path){
+            $document = Document::create([
+                'type_document_id' => $data['type_document_id'],
+                'user_id' => auth()->user()->id,
+                'nom_proprietaire' => $data['nom_proprietaire'],
+                'titre' => $data['titre'],
+                'fichier_url' => $path,
+                'trouve' => false,
+                'sauvegarge' => true,
+                'signale'    => false,
+                'supprime'   => false,
+            ]);
+            Log::channel('user_actions')->info('Document crée ', [
+                'id'           => $document->id,
+                'titre'        => $document->titre,
+                'created_by'   => auth()->user() ? auth()->user()->email : 'unknown',
+            ]);  
+            return $document;
+        });
+    }
+
+    public function updateDocument(string $id, array $data, string $path)
+    {
+        $document = Document::active()->findOrFail($id);
+        $document->update([
+            'type_document_id' => $data['type_document_id'],
+            'user_id' => auth()->user()->id,
+            'nom_proprietaire' => $data['nom_proprietaire'],
+            'titre' => $data['titre'],
+            'fichier_url' => $path,
+            'trouve' => false,
+            'sauvegarge' => true,
+            'signale'    => false,
+            'supprime'   => false,
+        ]);
+        Log::channel('user_actions')->info('Document mis à jour ', [
+            'id'           => $document->id,
+            'titre'        => $document->titre,
+            'updated_by'   => auth()->user() ? auth()->user()->email : 'unknown',
+        ]);        
+        return $document;
     }
 
     public function deleteDocument(string $id)
     {
-        // Logique pour supprimer un document
+        DB::transaction(function () use ($id){
+            $document = Document::active()->findOrFail($id);
+            $document->update(['supprime' => true]);
+
+            Log::channel('user_actions')->info('Document archivé ', [
+                'id'           => $document->id,
+                'titre'        => $document->titre,
+                'archived_by'   => auth()->user() ? auth()->user()->email : 'unknown',
+            ]);          
+        });
     }
 
-    public function getDocument(string $id)
-    {
-        // Logique pour récupérer un document
-    }
 }

@@ -29,9 +29,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     /**
      * Gestion des documents
      */
-    Route::get('documents', [DocumentController::class, 'indexUser']);
-    Route::apiresource('document', DocumentController::class)
-        ->only(['store', 'update', 'destroy', 'show']);
+    Route::apiresource('document', DocumentController::class);
 });
 
 
@@ -61,7 +59,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     /**
      * Gestion des documents
      */
-    Route::apiresource('document', DocumentController::class);
+    Route::get('documents', [DocumentController::class, 'indexAdmin']);
 
 });
 

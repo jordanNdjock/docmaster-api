@@ -35,7 +35,6 @@ class TypeDocumentRequest extends FormRequest
     {
         return [
             'titre.required' => 'Le titre est requis.',
-            'titre.string' => 'Le titre doit être une chaîne de caractères.',
             'titre.max' => 'Le titre ne doit pas dépasser 255 caractères.',
             'libelle.string' => 'Le libellé doit être une chaîne de caractères.',
             'libelle.max' => 'Le libellé ne doit pas dépasser 1000 caractères.',

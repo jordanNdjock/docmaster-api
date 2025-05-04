@@ -96,19 +96,21 @@ class TypeDocumentServices
                 'id'           => $typeDocument->id,
                 'titre'        => $typeDocument->titre,
                 'archived_by'   => auth('admin')->user() ? auth('admin')->user()->email : 'unknown',
-            ]);          });
+            ]);          
+        });
     }
 
     public function restoreTypeDocument(string $id): void
     {
         DB::transaction(function () use ($id){
-            $typeDocument = TypeDocument::inactive()->findOrFail($id);
+            $typeDocument = TypeDocument::archived()->findOrFail($id);
             $typeDocument->update(['supprime' => false]);
             Log::channel('admin_actions')->info('TypeDocument restauré ', [
                 'id'           => $typeDocument->id,
                 'titre'        => $typeDocument->titre,
                 'restored_by'   => auth('admin')->user() ? auth('admin')->user()->email : 'unknown',
-            ]);          });
+            ]);          
+        });
     }
 
     public function forceDeleteTypeDocument(string $id): void

@@ -13,6 +13,8 @@ class CreateDocumentsTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('type_document_id');
             $table->uuid('user_id');
+            $table->string('titre');
+            $table->string('nom_proprietaire');
             $table->string('fichier_url');
             $table->boolean('trouve')->default(false);
             $table->boolean('sauvegarde')->default(false);

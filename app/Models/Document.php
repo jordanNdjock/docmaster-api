@@ -10,9 +10,9 @@ class Document extends Model
     public $incrementing = false;
     protected $keyType  = 'string';
     protected $fillable = [
-        'id', 'type_document_id', 'user_id',
+        'id', 'type_document_id', 'user_id', 'titre',
         'fichier_url', 'trouve', 'sauvegarde',
-        'signale', 'supprime'
+        'signale', 'supprime', 'nom_proprietaire'
     ];
 
     protected $hidden = [

@@ -29,6 +29,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     /**
      * Gestion des documents
      */
+    Route::post('document/{id}/restore', [DocumentController::class, 'restore']);
+    Route::delete('document/{id}/force-delete', [DocumentController::class, 'forceDelete']);
+    Route::get('document/archived', [DocumentController::class, 'archived']);
     Route::apiresource('document', DocumentController::class);
 });
 

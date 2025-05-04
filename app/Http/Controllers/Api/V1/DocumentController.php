@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\Document\DocumentRequest;
+use App\Services\DocumentFileServices;
 use App\Services\DocumentServices;
-use App\Services\FileServices;
 use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ class DocumentController
 
     public function __construct(
         protected DocumentServices $documentServices,
-        protected FileServices $fileServices
+        protected DocumentFileServices $documentFileServices
     ){}
     /**
      * Display a listing of the resource.
@@ -63,7 +63,7 @@ class DocumentController
 
         try {
             $destinationPath = 'documents_'.auth()->user()->nom_utilisateur;
-            $path = $this->fileServices->storeFile($request->file('fichier_document'), $destinationPath);
+            $path = $this->documentFileServices->storeFile($request->file('fichier_document'), $destinationPath);
             $document = $this->documentServices->createDocument($validatedData, $path);
             return $this->sendResponse(
                 $document,
@@ -99,7 +99,7 @@ class DocumentController
 
         try {
             $destinationPath = 'documents_'.auth()->user()->nom_utilisateur;
-            $path = $this->fileServices->updateFile($request->file('fichier_document'), $destinationPath, $id);
+            $path = $this->documentFileServices->updateFile($request->file('fichier_document'), $destinationPath, $id);
             $document = $this->documentServices->updateDocument($id, $validatedData, $path);
             return $this->sendResponse(
                 $document,
@@ -126,5 +126,61 @@ class DocumentController
         } catch (ModelNotFoundException $e) {
             return $this->sendError('Document non trouvé !', [], 404);
         }
+    }
+
+     /**
+     * Restore the specified resource from storage.
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function restore(string $id)
+    {
+        try {
+            $this->documentServices->restoreDocument($id);
+            return $this->sendResponse(
+                [],
+                'Document restauré avec succès.'
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->sendError('Document non trouvé !', [], 404);
+        }
+    }
+
+    /**
+     * Force Remove the specified resource from storage
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function forceDelete(string $id)
+    {
+        try {
+            $this->documentServices->forceDeleteDocument($id);
+            $this->documentFileServices->deleteFile($id);
+            return $this->sendResponse(
+                [],
+                'Document supprimé définitivement avec succès.'
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->sendError('Document non trouvé !', [], 404);
+        }
+    }
+
+    /**
+     * Display a listing of the archived resource.
+     */
+    public function archived(Request $request): JsonResponse
+    {
+        $perPage = $request->query('per_page', 10);
+        $page = $request->query('page', 1);
+
+        $documents = $this->documentServices->getArchiveddocuments($perPage, $page);
+
+        return $this->sendResponse(
+            [
+            'archived_documents' => $documents['data'],
+            'meta' => $documents['meta']
+            ],
+            'Liste des documents supprimés récupérée avec succès.'
+        );
     }
 }

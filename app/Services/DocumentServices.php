@@ -129,4 +129,52 @@ class DocumentServices
         });
     }
 
+    public function restoreDocument(string $id): void
+    {
+        DB::transaction(function () use ($id){
+            $document = Document::archived()->findOrFail($id);
+            $document->update(['supprime' => false]);
+            Log::channel('user_actions')->info('Document restauré ', [
+                'id'           => $document->id,
+                'titre'        => $document->titre,
+                'restored_by'   => auth()->user() ? auth()->user()->email : 'unknown',
+            ]);          
+        });
+    }
+
+    public function forceDeleteDocument(string $id): void
+    {
+        DB::transaction(function () use ($id){
+            $document = Document::findOrFail($id);
+            $document->forceDelete();
+            Log::channel('user_actions')->info('Document supprimé ', [
+                'id'           => $document->id,
+                'titre'        => $document->titre,
+                'deleted_by'   => auth()->user() ? auth()->user()->email : 'unknown',
+            ]);          
+        });
+    }
+
+    public function getArchivedDocuments(int $perPage = 10, ?int $page = null): array
+    {
+        $page = $page ?: Paginator::resolveCurrentPage();
+
+        $paginator = Document::archived()->user()
+            ->paginate(
+            $perPage, 
+            ['*'],
+            'page',
+            $page
+        );
+        return [
+            'data' => $paginator->items(),
+            'meta' => [
+                'current_page' => $paginator->currentPage(),
+                'last_page'    => $paginator->lastPage(),
+                'per_page'     => $paginator->perPage(),
+                'total'        => $paginator->total(),
+            ],
+        ];
+    }
+
 }

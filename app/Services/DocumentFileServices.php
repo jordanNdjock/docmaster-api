@@ -14,8 +14,10 @@ class DocumentFileServices
             return $file->storeAs($folder, $fileName, 'public');
     }
 
-    public function deleteFile(string $filePath) : bool
+    public function deleteFile(string $id) : bool
     {
+        $document = Document::findOrFail($id);
+        $filePath = $document->fichier_url;
         if(Storage::disk('public')->exists($filePath)){
             return Storage::disk('public')->delete($filePath);
         }

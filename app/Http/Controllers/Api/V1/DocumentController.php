@@ -69,8 +69,8 @@ class DocumentController
                 $document,
                 'document créé avec succès.'
             );
-        } catch (\Exception $e) {
-            return $this->sendError('Erreur lors de la création du document.', [], 500);
+        } catch (\Throwable $th) {
+            return $this->sendError('Erreur lors de la création du document.', ['error' => $th->getMessage()], 500);
         }
     }
 
@@ -86,7 +86,7 @@ class DocumentController
                 'Document recupéré avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Document non trouvé !', [], 404);
+            return $this->sendError('Document non trouvé !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -108,7 +108,7 @@ class DocumentController
         } catch (\Exception $e) {
             return $this->sendError('Erreur lors de la modification du document.', [], 500);
         } catch (ModelNotFoundException $e){
-            return $this->sendError('Document non trouvé !', [], 404);
+            return $this->sendError('Document non trouvé !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -124,7 +124,7 @@ class DocumentController
                 'Document supprimé avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Document non trouvé !', [], 404);
+            return $this->sendError('Document non trouvé !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -142,7 +142,7 @@ class DocumentController
                 'Document restauré avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Document non trouvé !', [], 404);
+            return $this->sendError('Document non trouvé !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -161,7 +161,7 @@ class DocumentController
                 'Document supprimé définitivement avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Document non trouvé !', [], 404);
+            return $this->sendError('Document non trouvé !', ['error' => $e->getMessage()], 404);
         }
     }
 

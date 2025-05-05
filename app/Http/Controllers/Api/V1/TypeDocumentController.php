@@ -49,7 +49,7 @@ class TypeDocumentController
                 'Type de document créé avec succès.'
             );
         } catch (\Exception $e) {
-            return $this->sendError('Erreur lors de la création du type de document.', [], 500);
+            return $this->sendError('Erreur lors de la création du type de document.', ['error' => $e->getMessage()], 500);
         }
     }
 
@@ -65,7 +65,7 @@ class TypeDocumentController
                 'Type de document recupéré avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Type de document non trouvé !', [], 404);
+            return $this->sendError('Type de document non trouvé !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -83,7 +83,7 @@ class TypeDocumentController
                 'Type de document mis à jour avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Type de document non trouvé !', [], 404);
+            return $this->sendError('Type de document non trouvé !', ['error' => $e->getMessage()], 404);
         }
         catch (\Exception $e) {
             return $this->sendError('Erreur lors de la mise à jour du type de document.', [$e->getMessage()], 500);
@@ -102,7 +102,7 @@ class TypeDocumentController
                 'Type de document supprimé avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Type de document non trouvé !', [], 404);
+            return $this->sendError('Type de document non trouvé !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -120,7 +120,7 @@ class TypeDocumentController
                 'Type de document restauré avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Type de document non trouvé !', [], 404);
+            return $this->sendError('Type de document non trouvé !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -138,7 +138,7 @@ class TypeDocumentController
                 'Type de document supprimé définitivement avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Type de document non trouvé !', [], 404);
+            return $this->sendError('Type de document non trouvé !', ['error' => $e->getMessage()], 404);
         }
     }
 

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->double('montant');
             $table->date('date_debut');
             $table->date('date_expiration');
-            $table->string('nom_organisation')->nullable();
+            $table->boolean('supprime')->default(false);
             $table->timestamps();
         });
     }

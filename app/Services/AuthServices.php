@@ -18,7 +18,7 @@ class AuthServices
      */
     public function register(array $data): array
     {
-        Log::channel('user_actions')->info("Tentative d'enregistrement de l'utilisateur : ".$data['email']." par "+auth()->user()->email);
+        Log::channel('user_actions')->info("Tentative d'enregistrement de l'utilisateur : ".$data['email']." par "+ auth()->user()->email);
         $user = User::create([
             'prenom' => $data['prenom'],
             'initial_2_prenom' => getInitialPrenoms($data['prenom']),
@@ -59,6 +59,8 @@ class AuthServices
         $user = User::query()
         ->where('email', $email)
         ->where('supprime', false)
+        ->with('abonnement')
+        ->with('documents')
         ->first();
 
         if (! $user || ! Hash::check($password, $user->mdp)) {

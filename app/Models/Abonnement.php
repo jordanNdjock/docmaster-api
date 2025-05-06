@@ -15,12 +15,16 @@ class Abonnement extends Model
         'date_debut',
         'date_expiration',
         'montant',
-        'nom_organisation'
+        'supprime'
     ];
 
     protected $casts = [
         'date_debut' => 'datetime',
         'date_expiration' => 'datetime'
+    ];
+
+    protected $hidden = [
+        'supprime'
     ];
 
     protected static function booted()
@@ -31,5 +35,15 @@ class Abonnement extends Model
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('supprime', true);
+    }
+
+    public function scopeArchived($query)
+    {
+        return $query->where('supprime', false);
     }
 }

@@ -99,7 +99,7 @@ class TypeDocumentController
             $this->typeDocumentServices->deleteTypeDocument($id);
             return $this->sendResponse(
                 [],
-                'Type de document supprimé avec succès.'
+                'Type de document archivé avec succès.'
             );
         } catch (ModelNotFoundException $e) {
             return $this->sendError('Type de document non trouvé !', ['error' => $e->getMessage()], 404);

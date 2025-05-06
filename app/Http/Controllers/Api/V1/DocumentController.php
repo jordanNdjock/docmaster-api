@@ -19,7 +19,7 @@ class DocumentController
         protected DocumentFileServices $documentFileServices
     ){}
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource for the authenticated user.
      */
     public function index(Request $request ): JsonResponse
     {
@@ -37,7 +37,7 @@ class DocumentController
     }
 
     /**
-     * Display a listing of the resource for the authenticated user.
+     * Display a listing of the resource.
      */
     public function indexAdmin(Request $request): JsonResponse
     {

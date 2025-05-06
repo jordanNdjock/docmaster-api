@@ -33,6 +33,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete('document/{id}/force-delete', [DocumentController::class, 'forceDelete']);
     Route::get('document/archived', [DocumentController::class, 'archived']);
     Route::apiresource('document', DocumentController::class);
+
+    /**
+     * Souscrire à un abonnement
+     */
+    Route::post('abonnement/{id}/subscribe', [AbonnementController::class, 'subscribe']);
 });
 
 
@@ -68,6 +73,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     /** 
      * Gestion des abonnements
      */
+    Route::post('abonnements/{id}/restore', [DocumentController::class, 'restore']);
+    Route::delete('abonnements/{id}/force-delete', [DocumentController::class, 'forceDelete']);
+    Route::get('abonnements/archived', [DocumentController::class, 'archived']);
     Route::apiResource('abonnements', AbonnementController::class);
 
 });

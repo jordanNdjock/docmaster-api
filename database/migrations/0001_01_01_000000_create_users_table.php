@@ -22,12 +22,15 @@ return new class extends Migration
             $table->string('tel')->unique();
             $table->date('date_naissance')->nullable();
             $table->string('localisation')->nullable();
-            $table->text('infos_paiement')->nullable();
+            $table->string('infos_paiement')->nullable();
             $table->string('code_invitation')->nullable()->unique();
+            $table->string('abonnement_id')->nullable();
             $table->boolean('supprime')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('abonnement_id')->references('id')->on('abonnements');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

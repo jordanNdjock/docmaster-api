@@ -13,15 +13,13 @@ return new class extends Migration
     {
         Schema::create('abonnements', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('user_id');
-            $table->string('type_document_id');
-            $table->integer('nombre_documents');
-            $table->date('date_expiration');
+            $table->string('titre');
+            $table->integer('nombre_docs_par_type');
             $table->double('montant');
+            $table->date('date_debut');
+            $table->date('date_expiration');
+            $table->string('nom_organisation')->nullable();
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('type_document_id')->references('id')->on('types_documents');
         });
     }
 

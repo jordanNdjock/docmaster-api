@@ -44,6 +44,16 @@ class User extends Authenticatable
         static::creating(fn($m)=> $m->id = (string) Str::uuid());
     }
 
+    public function abonnement()
+    {
+        return $this->belongsTo(Abonnement::class);
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

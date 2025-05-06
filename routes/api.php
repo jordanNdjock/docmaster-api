@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AbonnementController;
 use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DocumentController;
@@ -19,7 +20,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      */
     Route::post('auth/logout', [AuthController::class, 'logout']);
 
-
     /**
      * Gestion des types de documents
      */
@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 
 
+
 //Côté admin
 
 //Authentification des admins
@@ -45,11 +46,11 @@ Route::group(['prefix' => 'admin/auth', 'middleware' => 'throttle:10,1'], functi
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
+
     /**
      * Gestion du profil admin et deconnexion
      */
     Route::post('auth/logout', [AdminController::class, 'logout']);
-
 
     /**
      * Gestion des types de documents
@@ -63,6 +64,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
      * Gestion des documents
      */
     Route::get('documents', [DocumentController::class, 'indexAdmin']);
+
+    /** 
+     * Gestion des abonnements
+     */
+    Route::apiResource('abonnements', AbonnementController::class);
 
 });
 

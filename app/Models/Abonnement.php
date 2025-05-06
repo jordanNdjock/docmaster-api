@@ -10,11 +10,17 @@ class Abonnement extends Model
     public $keyType = 'string';
     public $incrementing = false;
     protected $fillable = [
-        'user_id',
-        'type_document_id',
-        'nombre_documents',
+        'titre',
+        'nombre_docs_par_type',
+        'date_debut',
         'date_expiration',
         'montant',
+        'nom_organisation'
+    ];
+
+    protected $casts = [
+        'date_debut' => 'datetime',
+        'date_expiration' => 'datetime'
     ];
 
     protected static function booted()
@@ -22,13 +28,8 @@ class Abonnement extends Model
         static::creating(fn($m) => $m->id = (string) Str::uuid());
     }
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function typeDocument()
-    {
-        return $this->belongsTo(TypeDocument::class);
+        return $this->hasMany(User::class);
     }
 }

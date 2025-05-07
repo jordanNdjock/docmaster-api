@@ -26,12 +26,12 @@ class Document extends Model
 
     public function type_document()
     {
-        return $this->belongsTo(TypeDocument::class);
+        return $this->belongsTo(TypeDocument::class, 'type_document_id');
     }
     
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function docmasters()

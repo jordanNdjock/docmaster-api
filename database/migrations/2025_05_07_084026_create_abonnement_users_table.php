@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('abonnement_users', function (Blueprint $table) {
             $table->uuid('user_id');
             $table->uuid('abonnement_id');
+            $table->boolean('actif')->default(false);
             $table->date('date_debut')->nullable();
             $table->date('date_expiration')->nullable();
             $table->timestamps();

@@ -59,7 +59,7 @@ class AuthServices
         $user = User::query()
         ->where('email', $email)
         ->where('supprime', false)
-        ->with('abonnement')
+        ->with('abonnementUtilisateur.abonnement')
         ->with('documents')
         ->first();
 

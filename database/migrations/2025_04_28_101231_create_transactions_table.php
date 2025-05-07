@@ -13,7 +13,6 @@ class CreateTransactionsTable extends Migration
             $table->uuid('user_id');
             $table->uuidMorphs('transactionable');
             
-            $table->string('type_trans');
             $table->integer('statut')->default(0);
             $table->string('reference');
             $table->string('identifiant');

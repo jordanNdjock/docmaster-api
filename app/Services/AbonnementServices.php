@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Abonnement;
+use Exception;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -178,5 +179,14 @@ class AbonnementServices
     public function subscribeToAbonnement(string $id): void
     {
         //
+    }
+
+    public function verifyUserAbonnement(): Exception
+    {
+        $user = auth()->user();
+        if ($user->abonnementUser) {
+            return $user->abonnementUtilisateur->isActive();
+        }
+        throw new Exception('L\utilisateur n\'a pas d\'abonnement actif.');
     }
 }

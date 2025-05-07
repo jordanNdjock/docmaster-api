@@ -30,11 +30,6 @@ class Abonnement extends Model
         return $this->hasMany(AbonnementUser::class);
     }    
 
-    public function transactions()
-    {
-        return $this->morphMany(Transaction::class, 'transactionable');
-    }
-
     public function scopeActive($query)
     {
         return $query->where('supprime', true);

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\Document\DocumentRequest;
+use App\Services\AbonnementServices;
 use App\Services\DocumentFileServices;
 use App\Services\DocumentServices;
 use App\Traits\ApiResponse;
+use GuzzleHttp\Exception\TooManyRedirectsException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +18,8 @@ class DocumentController
 
     public function __construct(
         protected DocumentServices $documentServices,
-        protected DocumentFileServices $documentFileServices
+        protected DocumentFileServices $documentFileServices,
+        protected AbonnementServices $abonnementServices
     ){}
     /**
      * Display a listing of the resource for the authenticated user.
@@ -62,6 +65,7 @@ class DocumentController
         $validatedData = $request->validated();
 
         try {
+            $this->abonnementServices->verifyUserAbonnement();
             $destinationPath = 'documents_'.auth()->user()->nom_utilisateur;
             $path = $this->documentFileServices->storeFile($request->file('fichier_document'), $destinationPath);
             $document = $this->documentServices->createDocument($validatedData, $path);
@@ -71,6 +75,8 @@ class DocumentController
             );
         } catch (\Throwable $th) {
             return $this->sendError('Erreur lors de la création du document.', ['error' => $th->getMessage()], 500);
+        }catch (TooManyRedirectsException $th) {
+            return $this->sendError('Limite d’enregistrement de documents atteinte.', ['error' => $th->getMessage()], 500);
         }
     }
 
@@ -121,7 +127,7 @@ class DocumentController
             $this->documentServices->deleteDocument($id);
             return $this->sendResponse(
                 [],
-                'Document supprimé avec succès.'
+                'Document archivé avec succès.'
             );
         } catch (ModelNotFoundException $e) {
             return $this->sendError('Document non trouvé !', ['error' => $e->getMessage()], 404);

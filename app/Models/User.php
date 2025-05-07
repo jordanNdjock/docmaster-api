@@ -47,14 +47,9 @@ class User extends Authenticatable
         });
     }
 
-    public function abonnement()
+    public function abonnementUtilisateur()
     {
         return $this->hasOne(AbonnementUser::class);
-    }
-
-    public function getAbonnementAttribute()
-    {
-        return $this->abonnement?->abonnement;
     }
 
     public function documents()

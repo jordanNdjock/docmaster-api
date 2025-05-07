@@ -4,9 +4,11 @@ namespace App\Services;
 
 use App\Models\Document;
 use App\Traits\ApiResponse;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class DocumentServices
 {
@@ -71,10 +73,28 @@ class DocumentServices
 
     public function createDocument(array $data, string $path): Document
     {
+
         return DB::transaction(function () use ($data, $path){
+            $user = auth()->user();
+
+            $abonnementUser = $user->abonnementUser;
+            
+            $quota = $abonnementUser->abonnement->nombre_docs_par_type;
+
+            $existing = Document::where('type_document_id', $data['type_document_id'])
+            ->where('user_id', $user->id)
+            ->count();
+
+            if ($existing >= $quota) {
+                throw new TooManyRequestsHttpException(
+                    null,
+                    "Vous avez atteint le quota de {$quota} documents autorisés pour ce type."
+                );
+            }
+
             $document = Document::create([
                 'type_document_id' => $data['type_document_id'],
-                'user_id' => auth()->user()->id,
+                'user_id' =>  $user->id,
                 'nom_proprietaire' => $data['nom_proprietaire'],
                 'titre' => $data['titre'],
                 'fichier_url' => $path,
@@ -86,7 +106,7 @@ class DocumentServices
             Log::channel('user_actions')->info('Document crée ', [
                 'id'           => $document->id,
                 'titre'        => $document->titre,
-                'created_by'   => auth()->user() ? auth()->user()->email : 'unknown',
+                'created_by'   =>  $user ?  $user->email : 'unknown',
             ]);  
             return $document;
         });
@@ -94,10 +114,11 @@ class DocumentServices
 
     public function updateDocument(string $id, array $data, string $path)
     {
+        $user = auth()->user();
         $document = Document::active()->findOrFail($id);
         $document->update([
             'type_document_id' => $data['type_document_id'],
-            'user_id' => auth()->user()->id,
+            'user_id' =>  $user->id,
             'nom_proprietaire' => $data['nom_proprietaire'],
             'titre' => $data['titre'],
             'fichier_url' => $path,
@@ -109,7 +130,7 @@ class DocumentServices
         Log::channel('user_actions')->info('Document mis à jour ', [
             'id'           => $document->id,
             'titre'        => $document->titre,
-            'updated_by'   => auth()->user() ? auth()->user()->email : 'unknown',
+            'updated_by'   =>  $user ?  $user->email : 'unknown',
         ]);        
         return $document;
     }

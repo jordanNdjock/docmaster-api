@@ -10,7 +10,7 @@ class Transaction extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
-        'id','user_id','type_trans','statut','reference','identifiant','supprime'
+        'id','user_id','transactionable_id','transactionable_type','type_trans','statut','reference','identifiant','supprime'
     ];
 
     protected static function booted()
@@ -18,12 +18,18 @@ class Transaction extends Model
         static::creating(fn($m)=> $m->id = (string) Str::uuid());
     }
 
+    public function transactionable()
+    {
+        return $this->morphTo();
+    }
+
+    public function paiements()
+    {
+        return $this->hasMany(Paiement::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-    public function paiements()
-    {
-        return $this->hasOne(Paiement::class);
     }
 }

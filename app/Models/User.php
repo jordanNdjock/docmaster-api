@@ -23,7 +23,7 @@ class User extends Authenticatable
     protected $keyType  = 'string';
     protected $fillable = [
         'id','prenom','initial_2_prenom','nom_famille',
-        'nom_utilisateur','email','mdp','tel',
+        'nom_utilisateur','email','mdp','tel', 'solde',
         'date_naissance','infos_paiement','code_invitation','localisation','supprime'
     ];
 
@@ -41,17 +41,35 @@ class User extends Authenticatable
 
     protected static function booted()
     {
-        static::creating(fn($m)=> $m->id = (string) Str::uuid());
+        static::creating(function ($user) {
+            $user->id = (string) Str::uuid();
+            $user->code_invitation = self::generateInviteCode();
+        });
     }
 
     public function abonnement()
     {
-        return $this->belongsTo(Abonnement::class);
+        return $this->hasOne(AbonnementUser::class);
+    }
+
+    public function getAbonnementAttribute()
+    {
+        return $this->abonnement?->abonnement;
     }
 
     public function documents()
     {
         return $this->hasMany(Document::class);
+    }
+
+    public function docmasters()
+    {
+        return $this->hasMany(Docmaster::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 
     /**
@@ -65,5 +83,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'mdp' => 'hashed',
         ];
+    }
+
+    /**
+     * Génère un code d’invitation unique de la longueur souhaitée.
+     */
+    public static function generateInviteCode(int $length = 6): string
+    {
+        do {
+            $code = Str::random($length);
+        } while (self::where('code_invitation', $code)->exists());
+
+        return $code;
     }
 }

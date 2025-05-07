@@ -32,9 +32,9 @@ class Docmaster extends Model
         return $this->belongsTo(Document::class);
     }
 
-    public function paiements()
+    public function transactions()
     {
-        return $this->hasMany(Paiement::class);
+        return $this->morphMany(Transaction::class, 'transactionable');
     }
 }
 

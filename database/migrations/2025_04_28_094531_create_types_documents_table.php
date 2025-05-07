@@ -11,8 +11,8 @@ class CreateTypesDocumentsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('titre');
             $table->string('libelle')->nullable();
-            $table->double('frais');
-            $table->double('recompense');
+            $table->decimal('frais', 8, 0)->default(0);
+            $table->decimal('recompense', 8, 0)->default(0);
             $table->boolean('validite')->default(false);
             $table->date('date_expiration')->nullable();
             $table->boolean('supprime')->default(false);

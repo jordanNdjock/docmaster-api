@@ -4,6 +4,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use phpDocumentor\Reflection\Types\Nullable;
 
 class CreateDocmastersTable extends Migration
 {
@@ -11,14 +12,14 @@ class CreateDocmastersTable extends Migration
     {
         Schema::create('docmasters', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('doc_chercheur_id');
-            $table->uuid('doc_trouveur_id');
+            $table->uuid('doc_chercheur_id')->nullable();
+            $table->uuid('doc_trouveur_id')->nullable();
             $table->uuid('document_id');
             $table->integer('nombre_notif')->default(0);
-            $table->double('credit')->default(0);
-            $table->double('debit')->default(0);
+            $table->decimal('credit', 8, 0)->default(0);
+            $table->decimal('debit', 8, 0)->default(0);
             $table->boolean('confirm')->default(false);
-            $table->string('code_confirm');
+            $table->string('code_confirm', 5)->nullable()->unique();
             $table->boolean('supprime')->default(false);
             $table->timestamps();
 

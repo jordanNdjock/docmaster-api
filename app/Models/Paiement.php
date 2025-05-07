@@ -9,18 +9,20 @@ class Paiement extends Model
 {
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['id','transaction_id','docmaster_id','etat','supprime'];
+    protected $fillable = ['id','transaction_id','etat','supprime'];
 
     protected static function booted()
     {
         static::creating(fn($m)=> $m->id = (string) Str::uuid());
     }
+
     public function transaction()
     {
         return $this->belongsTo(Transaction::class);
     }
-    public function docmaster()
+
+    public function getUserAttribute()
     {
-        return $this->belongsTo(Docmaster::class);
+        return $this->transaction->user;
     }
 }

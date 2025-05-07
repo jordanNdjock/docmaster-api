@@ -12,15 +12,8 @@ class Abonnement extends Model
     protected $fillable = [
         'titre',
         'nombre_docs_par_type',
-        'date_debut',
-        'date_expiration',
         'montant',
         'supprime'
-    ];
-
-    protected $casts = [
-        'date_debut' => 'datetime',
-        'date_expiration' => 'datetime'
     ];
 
     protected $hidden = [
@@ -32,9 +25,14 @@ class Abonnement extends Model
         static::creating(fn($m) => $m->id = (string) Str::uuid());
     }
 
-    public function users()
+    public function abonnementsUsers()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(AbonnementUser::class);
+    }    
+
+    public function transactions()
+    {
+        return $this->morphMany(Transaction::class, 'transactionable');
     }
 
     public function scopeActive($query)

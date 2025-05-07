@@ -15,9 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('titre');
             $table->integer('nombre_docs_par_type');
-            $table->double('montant');
-            $table->date('date_debut');
-            $table->date('date_expiration');
+            $table->decimal('montant', 8, 0)->default(0);
             $table->boolean('supprime')->default(false);
             $table->timestamps();
         });

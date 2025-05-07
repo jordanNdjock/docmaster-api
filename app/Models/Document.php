@@ -36,7 +36,7 @@ class Document extends Model
 
     public function docmasters()
     {
-        return $this->hasOne(Docmaster::class);
+        return $this->hasMany(Docmaster::class);
     }
 
     public function scopeActive($query){

@@ -11,6 +11,8 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id');
+            $table->uuidMorphs('transactionable');
+            
             $table->string('type_trans');
             $table->integer('statut')->default(0);
             $table->string('reference');

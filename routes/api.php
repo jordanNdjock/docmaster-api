@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AbonnementController;
 use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\DocmasterController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\TypeDocumentController;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +39,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * Souscrire à un abonnement
      */
     Route::post('abonnement/{id}/subscribe', [AbonnementController::class, 'subscribe']);
+
+    /**
+     * Gestion des docmasters
+     */
+    Route::get('docmaster/search', [DocmasterController::class, 'search']);
+    Route::apiResource('docmaster', DocmasterController::class)
+        ->only(['index', 'show']);
 });
 
 
@@ -78,5 +86,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::get('abonnements/archived', [AbonnementController::class, 'archived']);
     Route::apiResource('abonnements', AbonnementController::class);
 
+    /** 
+     * Gestion des docmasters
+    */
+    Route::post('docmaster/{id}/restore', [DocmasterController::class, 'restore']);
+    Route::delete('docmaster/{id}/force-delete', [DocmasterController::class, 'forceDelete']);
+    Route::get('docmaster/archived', [DocmasterController::class, 'archived']);
+    Route::apiResource('docmaster', DocmasterController::class)
+        ->only(['index', 'show', 'destroy']);
 });
 

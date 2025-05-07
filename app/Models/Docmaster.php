@@ -16,7 +16,10 @@ class Docmaster extends Model
 
     protected static function booted()
     {
-        static::creating(fn($m) => $m->id = (string) Str::uuid());
+        static::creating(function($m){
+            $m->id = (string) Str::uuid();
+            $m->code_confirm = self::generateCodeConfirm();
+        });
     }
 
     public function chercheur()
@@ -35,6 +38,23 @@ class Docmaster extends Model
     public function transactions()
     {
         return $this->morphMany(Transaction::class, 'transactionable');
+    }
+
+    public function scopeActive($query){
+        return $query->where('supprime', false);
+    }
+
+    public function scopeArchived($query){
+        return $query->where('supprime', true);
+    }
+
+    public static function generateCodeConfirm(int $length = 5): string
+    {
+        do {
+            $code = Str::random($length);
+        } while (self::where('code_confirm', $code)->exists());
+
+        return $code;
     }
 }
 

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class AbonnementUser extends Model
@@ -20,6 +19,11 @@ class AbonnementUser extends Model
 
     protected $hidden = [
         'supprime'
+    ];
+
+    protected $casts = [
+        'date_debut' => 'datetime',
+        'date_expiration' => 'datetime',
     ];
 
     protected static function booted()
@@ -44,11 +48,11 @@ class AbonnementUser extends Model
 
     public function isActive(): bool
     {
-        $active = Carbon::now()->lte(Carbon::parse($this->date_expiration)->endOfDay());
+        $active = now()->lte($this->date_expiration->endOfDay());;
 
         if ((bool) $this->actif !== $active) {
             $this->actif = $active;
-            $this->save();
+            $this->saveQuietly();
         }
 
         return $active;

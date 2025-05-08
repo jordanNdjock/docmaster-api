@@ -11,12 +11,12 @@ class Document extends Model
     protected $keyType  = 'string';
     protected $fillable = [
         'id', 'type_document_id', 'user_id', 'titre',
-        'fichier_url', 'trouve', 'sauvegarde',
+        'fichier_url', 'trouve', 'sauvegarde', 'date_expiration',
         'signale', 'supprime', 'nom_proprietaire'
     ];
 
     protected $hidden = [
-        "supprime",
+        'supprime',
     ];
 
     protected $appends = [
@@ -52,7 +52,7 @@ class Document extends Model
     }
     
     public function scopeUser($query){
-        return $query->where('user_id', auth()->user()->id);
+        return $query->where('user_id', $this->user_id);
     }
 
     public function getCreatedAtHumanAttribute()

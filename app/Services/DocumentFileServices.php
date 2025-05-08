@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Storage;
 
 class DocumentFileServices
 {
+
+    private string $DOCUMENT_FOLDER = 'documents/documents'.auth()->user()->nom_utilisateur;
+
     public function storeFile(UploadedFile $file, string $folder = 'documents'): string
     {       
             $fileName = time().'_'.$file->getClientOriginalName();

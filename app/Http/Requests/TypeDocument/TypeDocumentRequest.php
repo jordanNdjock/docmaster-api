@@ -27,7 +27,6 @@ class TypeDocumentRequest extends FormRequest
             'frais' => 'required|numeric|min:0',
             'recompense' => 'required|numeric|min:0',
             'validite' => 'required|boolean',
-            'date_expiration' => 'nullable|date|required_if:validite,1,true',
         ];
     }
 
@@ -46,8 +45,6 @@ class TypeDocumentRequest extends FormRequest
             'recompense.min' => 'La récompense doit être supérieure ou égale à 0.',
             'validite.required' => 'La validité est requise.',
             'validite.boolean' => 'La validité doit être vrai ou faux.',
-            'validite.required_if' => 'La validité est requise si la date d\'expiration est spécifiée.',
-            'date_expiration.date' => "La date d'expiration n'est pas valide.",
         ];
     }
 }

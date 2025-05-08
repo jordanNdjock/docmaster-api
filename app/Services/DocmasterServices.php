@@ -10,6 +10,43 @@ use Illuminate\Support\Facades\Log;
 class DocmasterServices
 {
 
+    function __construct(
+        protected DocumentServices $documentServices,
+        protected DocumentFileServices $documentFileServices,
+    ) {}
+
+    public function declareDocmaster(array $data): array
+    {
+        return DB::transaction(function () use ($data){
+            $user = auth()->user();
+
+            if(!$data['document_id']){
+                $path = $this->documentFileServices->storeFile($data['fichier_url'], "documents_{$user->nom_utilisateur}");
+                $document = $this->documentServices->createDocument($data, $path);
+                $data['document_id'] = $document->id;
+            }
+
+            $docmaster = Docmaster::create([
+                'document_id' => $data['document_id'],
+                'chercheur_id' => $data['chercheur_id'],
+                'trouveur_id' => $data['trouveur_id'],
+                'date_declaration' => now(),
+                'user_id' => $user->id,
+                'type_docmaster' => $data['type_docmaster'],
+                'etat_docmaster' => $data['etat_docmaster'],
+                'credit' => $data['credit'],
+                'debit' => $data['debit'],
+            ]);
+
+            Log::channel('user_actions')->info('Docmaster(déclaration) créé ', [
+                'id'           => $docmaster->id,
+                'created_by'   => $user ? $user->email : 'unknown',
+            ]); 
+            
+            return $docmaster;
+        });
+    }
+
     public function searchByTitle(string $titre, $per_page = 10, ?string $page = null): array
     {
         // Rechercher les documents par titre

@@ -14,6 +14,10 @@ class Docmaster extends Model
         'etat_docmaster','nombre_notif','credit','debit','confirm','code_confirm','supprime'
     ];
 
+    protected $hidden = [
+        'supprime',
+    ];
+
     protected $appends = [
         'created_at_human'
     ];

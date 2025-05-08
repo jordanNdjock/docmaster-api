@@ -11,7 +11,7 @@ class TypeDocument extends Model
     public $table      = 'types_documents';
     public $incrementing = false;
     protected $keyType    = 'string';
-    protected $fillable   = ['id', 'titre', 'libelle', 'frais','recompense', 'validite','date_expiration', 'supprime'];
+    protected $fillable   = ['id', 'titre', 'libelle', 'frais','recompense', 'validite', 'supprime'];
 
     protected $hidden = [
         'supprime'

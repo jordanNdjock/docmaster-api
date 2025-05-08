@@ -14,7 +14,6 @@ class CreateTypesDocumentsTable extends Migration
             $table->decimal('frais', 8, 0)->default(0);
             $table->decimal('recompense', 8, 0)->default(0);
             $table->boolean('validite')->default(false);
-            $table->date('date_expiration')->nullable();
             $table->boolean('supprime')->default(false);
             $table->timestamps();
         });

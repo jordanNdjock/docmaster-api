@@ -16,6 +16,7 @@ class CreateDocumentsTable extends Migration
             $table->string('titre');
             $table->string('nom_proprietaire');
             $table->string('fichier_url');
+            $table->date('date_expiration')->nullable();
             $table->boolean('trouve')->default(false);
             $table->boolean('sauvegarde')->default(false);
             $table->boolean('signale')->default(false);

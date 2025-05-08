@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Document;
-use App\Traits\ApiResponse;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -11,8 +10,6 @@ use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 
 class DocumentServices
 {
-
-    use ApiResponse;
 
     /**
      * Get all documents with pagination.
@@ -96,6 +93,7 @@ class DocumentServices
                 'user_id' =>  $user->id,
                 'nom_proprietaire' => $data['nom_proprietaire'],
                 'titre' => $data['titre'],
+                'date_expiration' => $data['date_expiration'] ?? null,
                 'fichier_url' => $path,
                 'trouve' => false,
                 'sauvegarde' => true,

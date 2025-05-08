@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Requests\Docmaster\DocmasterRequest;
 use App\Services\DocmasterServices;
 use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -138,6 +139,11 @@ class DocmasterController
         );
     }
 
+    /**
+     * Search for a resource by title.
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function search(Request $request){
         $per_page = $request->query('per_page', 10);
         $page = $request->query('page', 1);
@@ -151,5 +157,23 @@ class DocmasterController
             ],
             'Liste des déclarations(docmasters) récupérée avec succès.'
         );
+    }
+
+    /**
+     * declare a document missed/find
+     */
+    public function declare(DocmasterRequest $request)
+    {
+        $validatedData = $request->validated();
+
+        try {
+            $docmaster = $this->docmasterServices->declareDocmaster($validatedData);
+            return $this->sendResponse(
+                $docmaster,
+                'Docmaster(déclaration) créé avec succès.'
+            );
+        } catch (\Throwable $e) {
+            return $this->sendError('Docmaster(déclaration) non trouvé !', ['error' => $e->getMessage()], 404);
+        }
     }
 }

@@ -53,7 +53,6 @@ class TypeDocumentServices
                 'libelle' => $data['libelle'],
                 'frais' => $data['frais'],
                 'recompense' => $data['recompense'],
-                'date_expiration' => $data['date_expiration'] ?? null,
                 'validite'        => $data['validite'],
             ]);
             Log::channel('admin_actions')->info('TypeDocument crée ', [
@@ -74,7 +73,6 @@ class TypeDocumentServices
             'libelle' => $data['libelle'],
             'frais' => $data['frais'],
             'recompense' => $data['recompense'],
-            'date_expiration' => $data['date_expiration'] ?? null,
             'validite'        => $data['validite'],
         ]);
         Log::channel('admin_actions')->info('TypeDocument mis à jour ', [

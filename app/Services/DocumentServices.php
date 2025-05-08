@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Document;
 use App\Traits\ApiResponse;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -88,7 +87,7 @@ class DocumentServices
             if ($existing >= $quota) {
                 throw new TooManyRequestsHttpException(
                     null,
-                    "Vous avez atteint le quota de {$quota} documents autorisés pour ce type."
+                    "Vous avez atteint le quota de {$quota} documents autorisés pour ce type de document."
                 );
             }
 
@@ -99,9 +98,8 @@ class DocumentServices
                 'titre' => $data['titre'],
                 'fichier_url' => $path,
                 'trouve' => false,
-                'sauvegarge' => true,
+                'sauvegarde' => true,
                 'signale'    => false,
-                'supprime'   => false,
             ]);
             Log::channel('user_actions')->info('Document crée ', [
                 'id'           => $document->id,

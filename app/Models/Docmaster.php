@@ -10,15 +10,19 @@ class Docmaster extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
-        'id','doc_chercheur_id','doc_trouveur_id','document_id',
-        'nombre_notif','credit','debit','confirm','code_confirm','supprime'
+        'id','doc_chercheur_id','doc_trouveur_id','document_id', 'type_docmaster','date_action',
+        'etat_docmaster','nombre_notif','credit','debit','confirm','code_confirm','supprime'
+    ];
+
+    protected $appends = [
+        'created_at_human'
     ];
 
     protected static function booted()
     {
         static::creating(function($m){
             $m->id = (string) Str::uuid();
-            $m->code_confirm = self::generateCodeConfirm();
+            $m->code_confirm = self::generateNumericCodeConfirm();
         });
     }
 
@@ -48,13 +52,21 @@ class Docmaster extends Model
         return $query->where('supprime', true);
     }
 
-    public static function generateCodeConfirm(int $length = 5): string
+    public static function generateNumericCodeConfirm(int $length = 6): string
     {
         do {
-            $code = Str::random($length);
+            $code = '';
+            for ($i = 0; $i < $length; $i++) {
+                $code .= random_int(0, 9);
+            }
         } while (self::where('code_confirm', $code)->exists());
 
         return $code;
+    }
+
+    public function getCreatedAtHumanAttribute()
+    {
+        return $this->created_at->diffForHumans();
     }
 }
 

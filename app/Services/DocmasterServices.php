@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Log;
 class DocmasterServices
 {
 
-    public function searchByTitle(string $titre, int $per_page = 10, ?string $page = null): array
+    public function searchByTitle(string $titre, $per_page = 10, ?string $page = null): array
     {
         // Rechercher les documents par titre
-        $paginator = Docmaster::with(['document','chercheur','trouveur'])
-            ->where('supprime', false)
+        $paginator = Docmaster::active()
+            ->with(['document','chercheur','trouveur'])
             ->whereHas('document', function($q) use ($titre) {
                 $q->where('titre', 'like', "%{$titre}%");
             })
@@ -36,7 +36,7 @@ class DocmasterServices
             ];
     }
 
-    public function getAllDocmasters(int $per_page = 10, ?string $page = null): array
+    public function getAllDocmasters($per_page = 10, ?string $page = null): array
     {
         $page = $page ?: Paginator::resolveCurrentPage();
 

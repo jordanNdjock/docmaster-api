@@ -55,7 +55,6 @@ class TypeDocumentServices
                 'recompense' => $data['recompense'],
                 'date_expiration' => $data['date_expiration'] ?? null,
                 'validite'        => $data['validite'],
-                'supprime'        => false,
             ]);
             Log::channel('admin_actions')->info('TypeDocument crée ', [
                 'id'           => $typeDocument->id,

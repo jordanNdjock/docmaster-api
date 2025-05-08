@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Abonnement;
 use App\Models\Admin;
 use App\Models\TypeDocument;
 use App\Models\User;
@@ -16,6 +17,34 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         TypeDocument::factory(1)->create();
+
+        Abonnement::factory(1)->create([
+            'titre' => 'Basique (Individuel)',
+            'nombre_docs_par_type' => 2,
+            'montant' => 500,
+            'supprime' => false,
+        ]);
+
+        Abonnement::factory(1)->create([
+            'titre' => 'Standard',
+            'nombre_docs_par_type' => 5,
+            'montant' => 1000,
+            'supprime' => false,
+        ]);
+
+        Abonnement::factory(1)->create([
+            'titre' => 'Familial',
+            'nombre_docs_par_type' => 10,
+            'montant' => 2000,
+            'supprime' => false,
+        ]);
+
+        Abonnement::factory(1)->create([
+            'titre' => 'Entreprise',
+            'nombre_docs_par_type' => 10000,
+            'montant' => 5000,
+            'supprime' => false,
+        ]);
 
         User::factory()->create([
             'nom_famille' => 'Test',

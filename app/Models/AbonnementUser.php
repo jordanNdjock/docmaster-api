@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class AbonnementUser extends Model
 {
@@ -17,6 +17,10 @@ class AbonnementUser extends Model
         'supprime'
     ];
 
+    protected $appends = [
+        'nombre_docs_utilises_par_type'
+    ];
+
     protected $hidden = [
         'supprime'
     ];
@@ -25,11 +29,6 @@ class AbonnementUser extends Model
         'date_debut' => 'datetime',
         'date_expiration' => 'datetime',
     ];
-
-    protected static function booted()
-    {
-        static::creating(fn($m) => $m->id = (string) Str::uuid());
-    }
 
     public function user()
     {
@@ -56,5 +55,19 @@ class AbonnementUser extends Model
         }
 
         return $active;
+    }
+
+    public function getNombreDocsUtilisesParTypeAttribute()
+    {
+        $userId = $this->user_id;
+
+        $rows = Document::query()
+            ->select('titre', DB::raw('COUNT(*) AS total'))
+            ->where('user_id', $userId)
+            ->where('sauvegarde', true)
+            ->groupBy('titre')
+            ->get();
+
+        return $rows->pluck('total', 'titre')->toArray();
     }
 }

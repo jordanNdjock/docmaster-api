@@ -19,6 +19,10 @@ class Document extends Model
         "supprime",
     ];
 
+    protected $appends = [
+        'created_at_human'
+    ];
+
     protected static function booted()
     {
         static::creating(fn($m) => $m->id = (string) Str::uuid());
@@ -49,5 +53,10 @@ class Document extends Model
     
     public function scopeUser($query){
         return $query->where('user_id', auth()->user()->id);
+    }
+
+    public function getCreatedAtHumanAttribute()
+    {
+        return $this->created_at->diffForHumans();
     }
 }

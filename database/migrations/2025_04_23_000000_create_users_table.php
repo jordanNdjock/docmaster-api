@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('mdp');
             $table->string('tel')->unique();
             $table->date('date_naissance')->nullable();
+            $table->string('photo_url')->nullable();
             $table->string('localisation')->nullable();
             $table->string('infos_paiement')->nullable();
             $table->decimal('solde', 8, 0)->default(0);

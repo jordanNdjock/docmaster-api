@@ -52,10 +52,7 @@ class AbonnementServices
             $abonnement = Abonnement::create([
                 'titre' => $data['titre'],
                 'nombre_docs_par_type' => $data['nombre_docs_par_type'],
-                'date_debut' => $data['date_debut'],
-                'date_expiration' => $data['date_expiration'],
                 'montant'        => $data['montant'],
-                'supprime'        => false,
             ]);
             Log::channel('admin_actions')->info('Abonnement crée ', [
                 'id'           => $abonnement->id,
@@ -78,10 +75,7 @@ class AbonnementServices
         $abonnement->update([
             'titre' => $data['titre'],
             'nombre_docs_par_type' => $data['nombre_docs_par_type'],
-            'date_debut' => $data['date_debut'],
-            'date_expiration' => $data['date_expiration'],
             'montant'        => $data['montant'],
-            'supprime'        => false,
         ]);
         Log::channel('admin_actions')->info('Abonnement mis à jour ', [
             'id'           => $abonnement->id,

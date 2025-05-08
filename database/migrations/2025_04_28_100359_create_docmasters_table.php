@@ -16,10 +16,13 @@ class CreateDocmastersTable extends Migration
             $table->uuid('doc_trouveur_id')->nullable();
             $table->uuid('document_id');
             $table->integer('nombre_notif')->default(0);
+            $table->enum('type_docmaster', ['Chercher', 'Trouver']);
+            $table->enum('etat_docmaster', ['Récupération', 'Perdu', 'Retrouvé', 'Récupéré']);
+            $table->date('date_action')->nullable();
             $table->decimal('credit', 8, 0)->default(0);
             $table->decimal('debit', 8, 0)->default(0);
             $table->boolean('confirm')->default(false);
-            $table->string('code_confirm', 5)->nullable()->unique();
+            $table->string('code_confirm', 6)->nullable()->unique();
             $table->boolean('supprime')->default(false);
             $table->timestamps();
 

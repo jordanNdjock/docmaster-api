@@ -23,7 +23,6 @@ class TypeDocumentFactory extends Factory
             'frais' => $this->faker->randomFloat(2, 0, 100),
             'recompense' => $this->faker->randomFloat(2, 0, 100),
             'validite' => $this->faker->boolean(50),
-            'date_expiration' => $this->faker->dateTimeBetween('now', '+2 years'),
             'supprime' => false,
         ];
     }

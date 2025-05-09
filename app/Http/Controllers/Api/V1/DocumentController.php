@@ -66,8 +66,7 @@ class DocumentController
 
         try {
             $this->abonnementServices->verifyUserAbonnement();
-            $destinationPath = 'documents_'.auth()->user()->nom_utilisateur;
-            $path = $this->documentFileServices->storeFile($request->file('fichier_document'), $destinationPath);
+            $path = $this->documentFileServices->storeFile($request->file('fichier_document'));
             $document = $this->documentServices->createDocument($validatedData, $path);
             return $this->sendResponse(
                 $document,
@@ -104,8 +103,7 @@ class DocumentController
         $validatedData = $request->validated();
 
         try {
-            $destinationPath = 'documents_'.auth()->user()->nom_utilisateur;
-            $path = $this->documentFileServices->updateFile($request->file('fichier_document'), $destinationPath, $id);
+            $path = $this->documentFileServices->updateFile($request->file('fichier_document'), $id);
             $document = $this->documentServices->updateDocument($id, $validatedData, $path);
             return $this->sendResponse(
                 $document,

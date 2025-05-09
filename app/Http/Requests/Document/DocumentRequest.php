@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Document;
 
+use App\Models\TypeDocument;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class DocumentRequest extends FormRequest
 {
@@ -26,7 +28,14 @@ class DocumentRequest extends FormRequest
                 'fichier_document' => 'required|file|mimes:jpg,png,pdf|max:20480',
                 'nom_proprietaire' => 'required|string',
                 'titre_document' => 'required|string',
-                'date_expiration' => 'nullable|date',
+                'date_expiration' => [
+                    'nullable',
+                    'date',
+                     Rule::requiredIf(function () {
+                        $td = TypeDocument::find($this->input('type_document_id'));
+                        return $td && (bool) $td->validite === true;
+                     }),
+                ],
         ];
     }
 
@@ -41,6 +50,7 @@ class DocumentRequest extends FormRequest
             'fichier_document.max' => 'La taille du fichier du document ne doit pas depasser 20Mo',
             'nom_proprietaire.required' => 'Le nom du propriétaire est requis',
             'date_expiration.date' => 'La date d\'expiration doit être une date valide',
+            'date_expiration.required' => 'La date d\'expiration est requise pour ce type de document',
         ];
     }
 }

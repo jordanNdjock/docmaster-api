@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Docmaster;
+use App\Models\Document;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -10,39 +11,57 @@ use Illuminate\Support\Facades\Log;
 class DocmasterServices
 {
 
-    function __construct(
-        protected DocumentServices $documentServices,
-        protected DocumentFileServices $documentFileServices,
-    ) {}
-
-    public function declareDocmaster(array $data): array
+    public function declareDocmaster(array $data): Docmaster
     {
         return DB::transaction(function () use ($data){
             $user = auth()->user();
+            $mode = $data['type_docmaster'];
 
-            if(!$data['document_id']){
-                $path = $this->documentFileServices->storeFile($data['fichier_url'], "documents_{$user->nom_utilisateur}");
-                $document = $this->documentServices->createDocument($data, $path);
-                $data['document_id'] = $document->id;
+            $isSearching = $mode === "Chercher";
+            $isFinding = $mode === "Trouver";
+
+            if($isSearching)
+            {
+                $document = Document::create([
+                    'user_id' => $user->id,
+                    'type_document_id' => $data['type_document_id'],
+                    'titre' => $data['titre_document'],
+                    'nom_proprietaire' => $data['nom_proprietaire'],
+                    'signale' => true,
+                ]);
+            }
+            elseif($isFinding)
+            {
+                $document = Document::create([
+                    'user_id' => $user->id,
+                    'type_document_id' => $data['type_document_id'],
+                    'titre' => $data['titre_document'],
+                    'nom_proprietaire' => $data['nom_proprietaire'],
+                    'date_expiration' => $data['date_expiration'] ?? null,
+                    'trouve' => true,
+                ]);
             }
 
             $docmaster = Docmaster::create([
-                'document_id' => $data['document_id'],
-                'chercheur_id' => $data['chercheur_id'],
-                'trouveur_id' => $data['trouveur_id'],
-                'date_declaration' => now(),
+                'doc_chercheur_id' => $isSearching ? $user->id : null,
+                'doc_trouveur_id' => $isFinding ? $user->id : null,
+                'date_action' => $data['date_action'] ?? null,
+                'document_id' => $document->id,
+                'nom_trouveur' => $isFinding ? $data['nom_trouveur'] : null,
+                'tel_trouveur' => $isFinding ? $data['tel_trouveur'] : null,
+                'infos_docs' => $isFinding ? $data['infos_docs'] ?? null : null,
                 'user_id' => $user->id,
-                'type_docmaster' => $data['type_docmaster'],
-                'etat_docmaster' => $data['etat_docmaster'],
-                'credit' => $data['credit'],
-                'debit' => $data['debit'],
+                'type_docmaster' => $mode,
+                'etat_docmaster' => $isSearching ? 'Perdu' : 'Trouvé',
             ]);
 
-            Log::channel('user_actions')->info('Docmaster(déclaration) créé ', [
+            Log::channel('user_actions')->info('Déclaration créée ', [
                 'id'           => $docmaster->id,
+                'etat_docmaster' => $docmaster->etat_docmaster,
+                'type_docmaster' => $docmaster->type_docmaster,
                 'created_by'   => $user ? $user->email : 'unknown',
             ]); 
-            
+
             return $docmaster;
         });
     }

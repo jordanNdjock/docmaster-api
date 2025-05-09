@@ -32,7 +32,7 @@ class DocmasterController
             'user_documents' => $documents['data'],
             'meta' => $documents['meta']
             ],
-            'Liste des déclarations(docmasters) récupérée avec succès.'
+            'Liste des déclarations récupérée avec succès.'
         );
     }
 
@@ -53,10 +53,10 @@ class DocmasterController
             $typeDoc = $this->docmasterServices->getDocmasterById($id);
             return $this->sendResponse(
                 $typeDoc,
-                'Docmaster(déclaration) recupéré avec succès.'
+                'Déclaration recupérée avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Docmaster(déclaration) non trouvé !', ['error' => $e->getMessage()], 404);
+            return $this->sendError('Déclaration non trouvée !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -77,10 +77,10 @@ class DocmasterController
             $this->docmasterServices->deleteDocmaster($id);
             return $this->sendResponse(
                 [],
-                'Docmaster(déclaration) archivé avec succès.'
+                'Déclaration archivée avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Docmaster(déclaration) non trouvé !', ['error' => $e->getMessage()], 404);
+            return $this->sendError('Déclaration non trouvée !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -95,7 +95,7 @@ class DocmasterController
             $this->docmasterServices->restoreDocmaster($id);
             return $this->sendResponse(
                 [],
-                'Docmaster(déclaration) restauré avec succès.'
+                'Déclaration restaurée avec succès.'
             );
         } catch (ModelNotFoundException $e) {
             return $this->sendError('Docmaster(déclaration) non trouvé !', ['error' => $e->getMessage()], 404);
@@ -113,10 +113,10 @@ class DocmasterController
             $this->docmasterServices->forceDeleteDocmaster($id);
             return $this->sendResponse(
                 [],
-                'Docmaster(déclaration) supprimé définitivement avec succès.'
+                'Déclaration supprimée définitivement avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Docmaster(déclaration) non trouvé !', ['error' => $e->getMessage()], 404);
+            return $this->sendError('Déclaration) non trouvé !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -135,7 +135,7 @@ class DocmasterController
             'archived_documents' => $docmasters['data'],
             'meta' => $docmasters['meta']
             ],
-            'Liste des Docmasters(déclarations) supprimés récupérée avec succès.'
+            'Liste des déclarations supprimées récupérée avec succès.'
         );
     }
 
@@ -155,7 +155,7 @@ class DocmasterController
             'docmasters' => $docmasters['data'],
             'meta' => $docmasters['meta']
             ],
-            'Liste des déclarations(docmasters) récupérée avec succès.'
+            'Liste des déclarations récupérée avec succès.'
         );
     }
 
@@ -170,10 +170,10 @@ class DocmasterController
             $docmaster = $this->docmasterServices->declareDocmaster($validatedData);
             return $this->sendResponse(
                 $docmaster,
-                'Docmaster(déclaration) créé avec succès.'
+                'Déclaration créée avec succès.'
             );
         } catch (\Throwable $e) {
-            return $this->sendError('Docmaster(déclaration) non trouvé !', ['error' => $e->getMessage()], 404);
+            return $this->sendError('Déclaration non trouvée !', ['error' => $e->getMessage()], 404);
         }
     }
 }

@@ -11,10 +11,10 @@ class DocumentFileServices
 
     private string $DOCUMENT_FOLDER = 'documents/documents'.auth()->user()->nom_utilisateur;
 
-    public function storeFile(UploadedFile $file, string $folder = 'documents'): string
+    public function storeFile(UploadedFile $file): string
     {       
             $fileName = time().'_'.$file->getClientOriginalName();
-            return $file->storeAs($folder, $fileName, 'public');
+            return $file->storeAs($this->DOCUMENT_FOLDER, $fileName, 'public');
     }
 
     public function deleteFile(string $id) : bool
@@ -27,13 +27,13 @@ class DocumentFileServices
         return false;
     }
 
-    public function updateFile(UploadedFile $file, string $folder, string $id): string
+    public function updateFile(UploadedFile $file, string $id): string
     {
         $document = Document::findOrFail($id);
         $existingPath = $document->fichier_url;
         if($existingPath && Storage::disk('public')->exists($existingPath)){
             Storage::disk('public')->delete($existingPath);
         }
-        return $this->storeFile($file, $folder);
+        return $this->storeFile($file);
     }
 }

@@ -11,7 +11,7 @@ class Docmaster extends Model
     protected $keyType = 'string';
     protected $fillable = [
         'id','doc_chercheur_id','doc_trouveur_id','document_id', 'type_docmaster','date_action',
-        'etat_docmaster','nombre_notif','credit','debit','confirm','code_confirm','supprime'
+        'nom_trouveur','infos_docs','tel_trouveur','etat_docmaster','nombre_notif','credit','debit','confirm','code_confirm','supprime'
     ];
 
     protected $hidden = [

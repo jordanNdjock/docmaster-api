@@ -43,9 +43,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     /**
      * Gestion des docmasters
      */
+    Route::post('declaration/{id}/restore', [DocmasterController::class, 'restore']);
+    Route::delete('declaration/{id}/force-delete', [DocmasterController::class, 'forceDelete']);
+    Route::get('declaration/archived', [DocmasterController::class, 'archived']);
     Route::get('declaration/search', [DocmasterController::class, 'search']);
     Route::apiResource('declaration', DocmasterController::class)
-        ->only(['index', 'show', 'update', 'destroy']);
+        ->only(['index', 'show', 'update', 'destroy', 'store']);
 });
 
 
@@ -89,10 +92,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     /** 
      * Gestion des docmasters
     */
-    Route::post('declaration/{id}/restore', [DocmasterController::class, 'restore']);
     Route::delete('declaration/{id}/force-delete', [DocmasterController::class, 'forceDelete']);
-    Route::get('declaration/archived', [DocmasterController::class, 'archived']);
     Route::apiResource('declaration', DocmasterController::class)
-        ->only(['index', 'show', 'destroy']);
+        ->only(['index', 'show']);
 });
 

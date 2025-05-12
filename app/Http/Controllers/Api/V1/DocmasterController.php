@@ -37,14 +37,6 @@ class DocmasterController
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(string $id)
@@ -98,7 +90,7 @@ class DocmasterController
                 'Déclaration restaurée avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Docmaster(déclaration) non trouvé !', ['error' => $e->getMessage()], 404);
+            return $this->sendError('Déclaration non trouvée !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -116,7 +108,7 @@ class DocmasterController
                 'Déclaration supprimée définitivement avec succès.'
             );
         } catch (ModelNotFoundException $e) {
-            return $this->sendError('Déclaration) non trouvé !', ['error' => $e->getMessage()], 404);
+            return $this->sendError('Déclaration non trouvée !', ['error' => $e->getMessage()], 404);
         }
     }
 
@@ -162,7 +154,7 @@ class DocmasterController
     /**
      * declare a document missed/find
      */
-    public function declare(DocmasterRequest $request)
+    public function store(DocmasterRequest $request)
     {
         $validatedData = $request->validated();
 

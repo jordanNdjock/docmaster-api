@@ -50,7 +50,6 @@ class DocmasterServices
                 'nom_trouveur' => $isFinding ? $data['nom_trouveur'] : null,
                 'tel_trouveur' => $isFinding ? $data['tel_trouveur'] : null,
                 'infos_docs' => $isFinding ? $data['infos_docs'] ?? null : null,
-                'user_id' => $user->id,
                 'type_docmaster' => $mode,
                 'etat_docmaster' => $isSearching ? 'Perdu' : 'Trouvé',
             ]);
@@ -126,9 +125,9 @@ class DocmasterServices
             $docmaster = Docmaster::active()->findOrFail($id);
             $docmaster->update(['supprime' => true]);
 
-            Log::channel('user_actions')->info('Docmaster(déclaration) archivé ', [
+            Log::channel('user_actions')->info('Déclaration archivée ', [
                 'id'           => $docmaster->id,
-                'archived_by'   => auth('admin')->user() ? auth('admin')->user()->email : 'unknown',
+                'archived_by'   => auth()->user() ? auth()->user()->email : 'unknown',
             ]);          
         });
     }
@@ -138,9 +137,9 @@ class DocmasterServices
         DB::transaction(function () use ($id){
             $docmaster = Docmaster::archived()->findOrFail($id);
             $docmaster->update(['supprime' => false]);
-            Log::channel('user_actions')->info('Docmaster(déclaration) restauré ', [
+            Log::channel('user_actions')->info('Déclaration restaurée ', [
                 'id'           => $docmaster->id,
-                'restored_by'   => auth('admin')->user() ? auth('admin')->user()->email : 'unknown',
+                'restored_by'   => auth()->user() ? auth()->user()->email : 'unknown',
             ]);          
         });
     }
@@ -148,11 +147,12 @@ class DocmasterServices
     public function forceDeleteDocmaster(string $id): void
     {
         DB::transaction(function () use ($id){
+            $user = auth()->user() ?: auth('admin')->user();
             $docmaster = Docmaster::findOrFail($id);
             $docmaster->forceDelete();
-            Log::channel('user_actions')->info('Document supprimé ', [
+            Log::channel($user->nom_famille ? 'user_actions' : 'admin_actions')->info('Déclaration supprimée ', [
                 'id'           => $docmaster->id,
-                'deleted_by'   => auth('admin')->user() ? auth('admin')->user()->email : 'unknown',
+                'deleted_by'   => $user ? $user->email : 'unknown',
             ]);          
         });
     }

@@ -91,4 +91,14 @@ class User extends Authenticatable
 
         return $code;
     }
+
+     public function scopeActive($query)
+     {
+         return $query->where('supprime', false);
+     }
+ 
+     public function scopeBloqued($query)
+     {
+         return $query->where('supprime', true);
+     }
 }

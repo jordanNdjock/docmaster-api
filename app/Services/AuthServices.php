@@ -28,7 +28,6 @@ class AuthServices
             'mdp' => Hash::make($data['mdp']),
             'tel' => $data['tel'],
             'date_naissance' => $data['date_naissance'],
-            'supprime' => false,
         ]);
 
         Log::channel('user_actions')->info("Utilisateur enregistré avec succès : {$user->email}");
@@ -64,7 +63,7 @@ class AuthServices
         ->first();
 
         if (! $user || ! Hash::check($password, $user->mdp)) {
-            throw new AuthenticationException('Identifiants invalides ou utilisateur supprimé.');
+            throw new AuthenticationException('Identifiants invalides ou utilisateur supprimé/bloqué.');
         }
 
         Log::channel('user_actions')->info("Utilisateur authentifié avec succès : {$user->email}");

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DocmasterController;
 use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\TypeDocumentController;
+use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Authentification des utilisateurs
@@ -95,5 +96,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::delete('declaration/{id}/force-delete', [DocmasterController::class, 'forceDelete']);
     Route::apiResource('declaration', DocmasterController::class)
         ->only(['index', 'show']);
+
+    /**
+     * Gestion des utilisateurs
+     */
+    Route::apiResource('users', UserController::class)
+       ->only(['index', 'show', 'update', 'destroy']); 
 });
 

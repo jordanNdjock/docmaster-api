@@ -96,6 +96,7 @@ class DocmasterServices
         $page = $page ?: Paginator::resolveCurrentPage();
 
         $paginator = Docmaster::active()
+            ->orderByDesc('created_at')
             ->paginate(
                 $per_page,
                 ['*'],

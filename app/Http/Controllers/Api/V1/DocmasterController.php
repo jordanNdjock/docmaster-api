@@ -26,11 +26,11 @@ class DocmasterController
         $per_page = $request->query('per_page', 10);
         $page = $request->query('page', 1);
 
-        $documents = $this->docmasterServices->getAllDocmasters($per_page, $page);
+        $docmasters = $this->docmasterServices->getAllDocmasters($per_page, $page);
         return $this->sendResponse(
             [
-            'user_documents' => $documents['data'],
-            'meta' => $documents['meta']
+            'declarations' => $docmasters['data'],
+            'meta' => $docmasters['meta']
             ],
             'Liste des déclarations récupérée avec succès.'
         );
@@ -42,9 +42,9 @@ class DocmasterController
     public function show(string $id)
     {
         try {
-            $typeDoc = $this->docmasterServices->getDocmasterById($id);
+            $docmaster = $this->docmasterServices->getDocmasterById($id);
             return $this->sendResponse(
-                $typeDoc,
+                $docmaster,
                 'Déclaration recupérée avec succès.'
             );
         } catch (ModelNotFoundException $e) {
@@ -124,7 +124,7 @@ class DocmasterController
 
         return $this->sendResponse(
             [
-            'archived_documents' => $docmasters['data'],
+            'archived_declarations' => $docmasters['data'],
             'meta' => $docmasters['meta']
             ],
             'Liste des déclarations supprimées récupérée avec succès.'

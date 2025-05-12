@@ -85,9 +85,9 @@ class DocumentController
     public function show(string $id)
     {
         try {
-            $typeDoc = $this->documentServices->getDocumentById($id);
+            $document = $this->documentServices->getDocumentById($id);
             return $this->sendResponse(
-                $typeDoc,
+                $document,
                 'Document recupéré avec succès.'
             );
         } catch (ModelNotFoundException $e) {

@@ -45,9 +45,9 @@ class AbonnementController
         $validatedData = $request->validated();
 
         try {
-            $typeDocument = $this->abonnementServices->createAbonnement($validatedData);
+            $abonnements = $this->abonnementServices->createAbonnement($validatedData);
             return $this->sendResponse(
-                $typeDocument,
+                $abonnements,
                 'Abonnement créé avec succès.'
             );
         } catch (\Exception $e) {
@@ -61,9 +61,9 @@ class AbonnementController
     public function show(string $id)
     {
         try {
-            $typeDoc = $this->abonnementServices->getAbonnementById($id);
+            $abonnements = $this->abonnementServices->getAbonnementById($id);
             return $this->sendResponse(
-                $typeDoc,
+                $abonnements,
                 'Abonnement recupéré avec succès.'
             );
         } catch (ModelNotFoundException $e) {
@@ -79,9 +79,9 @@ class AbonnementController
         $validatedData = $request->validated();
 
         try {
-            $typeDocument = $this->abonnementServices->updateAbonnement($id, $validatedData);
+            $abonnements = $this->abonnementServices->updateAbonnement($id, $validatedData);
             return $this->sendResponse(
-                $typeDocument,
+                $abonnements,
                 'Abonnement mis à jour avec succès.'
             );
         } catch (ModelNotFoundException $e) {

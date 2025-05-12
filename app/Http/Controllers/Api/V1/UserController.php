@@ -22,11 +22,11 @@ class UserController
         $per_page = $request->query('per_page', 10);
         $page = $request->query('page', 1);
 
-        $documents = $this->userServices->getAllUsers($per_page, $page);
+        $users = $this->userServices->getAllUsers($per_page, $page);
         return $this->sendResponse(
             [
-            'users' => $documents['data'],
-            'meta' => $documents['meta']
+            'users' => $users['data'],
+            'meta' => $users['meta']
             ],
             'Liste des utilisateurs récupérée avec succès.'
         );

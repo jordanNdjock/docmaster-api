@@ -19,8 +19,8 @@ class UserServices
     {
         $page = $page ?: Paginator::resolveCurrentPage();
 
-        $paginator = User::active()
-            ->paginate(
+        $paginator = User::
+            paginate(
                 $per_page,
                 ['*'],
                 'page',

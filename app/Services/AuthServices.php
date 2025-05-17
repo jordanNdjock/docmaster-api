@@ -28,6 +28,7 @@ class AuthServices
             'mdp' => Hash::make($data['mdp']),
             'tel' => $data['tel'],
             'date_naissance' => $data['date_naissance'],
+            'localisation' => $data['localisation'] ?? null,
         ]);
 
         Log::channel('user_actions')->info("Utilisateur enregistré avec succès : {$user->email}");

@@ -94,4 +94,32 @@ class UserServices
             ]);          
         });
     }
+    
+    public function blockUser(string $id){
+        DB::transaction(function () use ($id){
+            $user = User::active()->findOrFail($id);
+            $user->update([ 'supprime' => true ]);
+
+            Log::channel('admin_actions')->info('Utilisateur blocké ', [
+                'id'           => $user->id,
+                'email'        => $user->email,
+                'nom_utilisateur' => $user->nom_utilisateur,
+                'blocked_by'   => auth('admin')->user() ? auth('admin')->user()->email : 'unknown',
+            ]); 
+        });
+    }
+
+    public function restoreUser(string $id): void
+    {
+        DB::transaction(function () use ($id){
+            $user = User::bloqued()->findOrFail($id);
+            $user->update(['supprime' => false]);
+            Log::channel('admin_actions')->info('Utilisateur restauré ', [
+                'id'           => $user->id,
+                'email'        => $user->email,
+                'nom_utilisateur' => $user->nom_utilisateur,
+                'restored_by'   => auth('admin')->user() ? auth('admin')->user()->email : 'unknown',
+            ]);          
+        });
+    }
 }

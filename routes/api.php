@@ -100,6 +100,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     /**
      * Gestion des utilisateurs
      */
+    Route::post('users/{id}/blocked', [UserController::class, 'blocked']);
+    Route::post('users/{id}/restore', [UserController::class, 'restore']);
     Route::apiResource('users', UserController::class)
        ->only(['index', 'show', 'update', 'destroy']); 
 });

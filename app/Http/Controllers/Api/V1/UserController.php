@@ -61,7 +61,18 @@ class UserController
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validated();
+        try {
+            $user = $this->userServices->updateUser($id, $validated);
+            return $this->sendResponse(
+                $user,
+                'Utilisateur mis à jour avec succès.'
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->sendError('Utilisateur non trouvé !', ['error' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            return $this->sendError('Erreur lors de la mise à jour du type de document.', [$e->getMessage()], 500);
+        }
     }
 
     /**
@@ -77,6 +88,40 @@ class UserController
             );
         } catch (ModelNotFoundException $e) {
             return $this->sendError('Utilisateur non trouvé !', ['error' => $e->getMessage()], 404);
+        }
+    }
+
+    /**
+     * Summary of blocked
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function blocked(string $id){
+        try {
+            $this->userServices->blockUser($id);
+            return $this->sendResponse(
+                [],
+                'Utilisateur bloqué avec succès.'
+            );
+        } catch (ModelNotFoundException $th) {
+            return $this->sendError('Utilisateur non trouvé !', ['error' => $th->getMessage()], 404);
+        }
+    }
+
+    /**
+     * Summary of restore
+     * @param string $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function restore(string  $id){
+        try {
+            $this->userServices->restoreUser($id);
+            return $this->sendResponse(
+                [],
+                'Utilisateur restauré avec succès.'
+            );
+        } catch (ModelNotFoundException $th) {
+            return $this->sendError('Utilisateur non trouvé !', ['error' => $th->getMessage()], 404);
         }
     }
 }

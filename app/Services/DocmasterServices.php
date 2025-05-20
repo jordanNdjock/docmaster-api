@@ -97,6 +97,7 @@ class DocmasterServices
 
         $paginator = Docmaster::active()
             ->orderByDesc('created_at')
+            ->with('chercheur','trouveur', 'document', 'transactions')
             ->paginate(
                 $per_page,
                 ['*'],

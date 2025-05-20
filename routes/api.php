@@ -85,10 +85,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     /** 
      * Gestion des abonnements
      */
-    Route::post('abonnements/{id}/restore', [AbonnementController::class, 'restore']);
-    Route::delete('abonnements/{id}/force-delete', [AbonnementController::class, 'forceDelete']);
-    Route::get('abonnements/archived', [AbonnementController::class, 'archived']);
-    Route::apiResource('abonnements', AbonnementController::class);
+    Route::post('abonnement/{id}/restore', [AbonnementController::class, 'restore']);
+    Route::delete('abonnement/{id}/force-delete', [AbonnementController::class, 'forceDelete']);
+    Route::get('abonnement/archived', [AbonnementController::class, 'archived']);
+    Route::apiResource('abonnement', AbonnementController::class);
 
     /** 
      * Gestion des docmasters

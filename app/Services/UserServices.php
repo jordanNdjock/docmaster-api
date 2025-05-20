@@ -54,7 +54,7 @@ class UserServices
      * @param array $data
      * @return User
      */
-    public function updateUser(string $id, array $data): User
+    public function updateUser(string $id, array $data, ?string $path): User
     {
         $user = User::active()->findOrFail($id);
         $user->update([
@@ -65,6 +65,9 @@ class UserServices
             'email' => $data['email'],
             'tel' => $data['tel'],
             'date_naissance' => $data['date_naissance'],
+            'localisation' => $data['localisation'] ?? null,
+            'infos_paiement' => $data['infos_paiement'] ?? null,
+            'photo_url' => $path ?? null,
         ]);
         Log::channel('admin_actions')->info('Utilisateur mis à jour ', [
             'id'           => $user->id,

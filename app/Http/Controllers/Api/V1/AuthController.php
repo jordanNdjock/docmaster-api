@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\AuthServices;
+use App\Services\UserFileServices;
 use App\Traits\ApiResponse;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class AuthController extends Controller
 
     public function __construct(
         protected AuthServices $authServices,
+        protected UserFileServices $userFileServices,
     ) {}
 
    /**
@@ -92,6 +94,10 @@ class AuthController extends Controller
     public function register(RegisterRequest $request){
         $credentials = $request->validated();
         try {
+            if($request->hasFile('photo_url'))
+                $path = $this->userFileServices->storeFile($request->file('photo_url'));
+            
+            $this->authServices->register($credentials, $path);
         } catch (\Throwable $th) {
             return $this->sendError('Erreur interne lors de la création du compte.', ['error' => $th->getMessage()], 500);
         }

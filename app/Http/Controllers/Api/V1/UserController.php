@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Requests\Utilisateur\UserUpdateRequest;
+use App\Models\User;
+use App\Services\UserFileServices;
 use App\Services\UserServices;
 use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -13,6 +16,7 @@ class UserController
 
     public function __construct(
         protected UserServices $userServices,
+        protected UserFileServices $userFileServices,
     ){}
     /**
      * Display a listing of the resource.
@@ -59,11 +63,17 @@ class UserController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserUpdateRequest $request, string $id)
     {
         $validated = $request->validated();
         try {
-            $user = $this->userServices->updateUser($id, $validated);
+            if($request->hasFile('photo_url')){
+                $path = $this->userFileServices->updateFile($request->file('photo_url'), $id);
+            }else{
+                $user = User::findOrFail($id);
+                $path = $user->photo_url ?? null;
+            }
+            $user = $this->userServices->updateUser($id, $validated, $path);
             return $this->sendResponse(
                 $user,
                 'Utilisateur mis à jour avec succès.'

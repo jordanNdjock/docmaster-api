@@ -16,10 +16,10 @@ class AuthServices
      * @param  array  $data  Les données de l'utilisateur à enregistrer.
      * @return User  L'utilisateur enregistré.
      */
-    public function register(array $data): array
+    public function register(array $data, ?string $path): array
     {
-        Log::channel('user_actions')->info("Tentative d'enregistrement de l'utilisateur : ".$data['email']." par "+ auth()->user()->email);
-        $user = User::create([
+        $user = auth()->user() ?: auth('admin')->user();
+        $userCreated = User::create([
             'prenom' => $data['prenom'],
             'initial_2_prenom' => getInitialPrenoms($data['prenom']),
             'nom_famille' => $data['nom_famille'],
@@ -29,12 +29,18 @@ class AuthServices
             'tel' => $data['tel'],
             'date_naissance' => $data['date_naissance'],
             'localisation' => $data['localisation'] ?? null,
+            'infos_paiement' => $data['infos_paiement'] ?? null,
+            'photo_url' => $path ?? null,
         ]);
 
-        Log::channel('user_actions')->info("Utilisateur enregistré avec succès : {$user->email}");
+        Log::channel($user->nom_famille ? 'user_actions' : 'admin_actions')->info("Utilisateur enregistré avec succès : ", [
+                'id'           => $userCreated->id,
+                'email'        => $userCreated->email,
+                'created_by'   => $user ? $user->email : 'unknown',
+            ]);           
         $token = $user
-            ->createToken("access_token_of_{$user->email}")
-            ->plainTextToken;
+                ->createToken("access_token_of_{$userCreated->email}")
+                ->plainTextToken;
 
         return [
             'user'  => $user,

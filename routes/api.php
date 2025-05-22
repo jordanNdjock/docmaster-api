@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DocmasterController;
 use App\Http\Controllers\Api\V1\DocumentController;
+use App\Http\Controllers\Api\V1\StatisticController;
 use App\Http\Controllers\Api\V1\TypeDocumentController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
@@ -104,5 +105,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     Route::post('users/{id}/restore', [UserController::class, 'restore']);
     Route::apiResource('users', UserController::class)
        ->only(['index', 'show', 'update', 'destroy']); 
+    
+    /**
+    * Gestion des stats
+    */
+    Route::get('stats', [StatisticController::class, 'getStats']);
 });
 

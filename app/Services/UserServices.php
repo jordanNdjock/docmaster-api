@@ -66,6 +66,7 @@ class UserServices
             'tel' => $data['tel'],
             'date_naissance' => $data['date_naissance'],
             'localisation' => $data['localisation'] ?? null,
+            'solde' => $data['solde'],
             'infos_paiement' => $data['infos_paiement'] ?? null,
             'photo_url' => $path ?? null,
         ]);

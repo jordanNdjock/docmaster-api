@@ -36,6 +36,7 @@ class UserUpdateRequest extends FormRequest
                 $this->hasFile('photo_url') ? 'file' : 'string',
                 Rule::when($this->hasFile('photo_url'), ['mimes:jpg,jpeg,png,gif', 'max:5120'])
             ],
+            'solde' => 'nullable|string',
         ];
     }
 

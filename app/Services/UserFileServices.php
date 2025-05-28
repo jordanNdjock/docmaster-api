@@ -14,7 +14,7 @@ class UserFileServices
 
     public function __construct()
     {
-        $this->USER_FOLDER = 'users/photos/' . auth()->user()->nom_utilisateur;
+        $this->USER_FOLDER = 'users/photos/' . auth()->user()?->nom_utilisateur;
     }
     public function storeFile(UploadedFile $file): string
     {       

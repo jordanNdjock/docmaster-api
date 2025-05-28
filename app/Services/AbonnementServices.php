@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Abonnement;
+use App\Models\AbonnementUser;
+use App\Models\Transaction;
 use Exception;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +12,9 @@ use Illuminate\Support\Facades\Log;
 
 class AbonnementServices
 {
+    public function __construct(
+       protected TransactionServices $transactionServices
+    ){}
     /**
      * Get all documents with pagination.
      */
@@ -170,9 +175,25 @@ class AbonnementServices
      * @param string $id
      * @return void
      */
-    public function subscribeToAbonnement(string $id): void
+    public function subscribeToAbonnement(string $id, array $data): ?Transaction
     {
-        //
+        Abonnement::active()->findOrFail($id);
+        $user = auth()->user();
+
+        $abonnementUser = AbonnementUser::where('user_id', $user->id)->first();
+
+        if(!$abonnementUser){
+            $abonnementUser = AbonnementUser::create([
+                'abonnement_id' => $id,
+                'user_id' => $user->id,
+                'actif' => false
+            ]);
+        }
+
+        $transaction = $this->transactionServices->initiateTransaction($data, $abonnementUser->id);
+
+        return $transaction;
+
     }
 
     public function verifyUserAbonnement(): Exception

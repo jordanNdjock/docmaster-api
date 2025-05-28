@@ -20,7 +20,7 @@ class AbonnementFactory extends Factory
             'nombre_docs_par_type' => $this->faker->numberBetween(1, 10),
             'titre' => $this->faker->word(),
             'montant' => $this->faker->randomFloat(2, 1, 100),
-            'supprime' => $this->faker->boolean(),
+            'supprime' => false,
         ];
     }
 }

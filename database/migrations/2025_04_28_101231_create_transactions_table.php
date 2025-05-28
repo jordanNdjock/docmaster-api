@@ -13,8 +13,8 @@ class CreateTransactionsTable extends Migration
             $table->uuid('user_id');
             $table->uuidMorphs('transactionable');
             
-            $table->integer('statut')->default(0);
-            $table->string('reference');
+            $table->string('statut', 12);
+            $table->decimal('montant', 8, 0);
             $table->string('identifiant');
             $table->boolean('supprime')->default(false);
             $table->timestamps();

@@ -9,7 +9,7 @@ class Paiement extends Model
 {
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['id','transaction_id','etat','supprime'];
+    protected $fillable = ['id','transaction_id','etat','montant','supprime'];
 
     protected static function booted()
     {

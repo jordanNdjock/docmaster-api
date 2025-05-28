@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\Abonnement\AbonnementRequest;
+use App\Http\Requests\Transaction\TransactionRequest;
 use App\Services\AbonnementServices;
 use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -166,16 +167,19 @@ class AbonnementController
     /**
      * Subscribe to an abonnement
      */
-    public function subscribe(string $id): JsonResponse
+    public function subscribe(TransactionRequest $request, string $id): JsonResponse
     {
+        $validatedData = $request->validated();
         try {
-            $this->abonnementServices->subscribeToAbonnement($id);
+            $abonnement = $this->abonnementServices->subscribeToAbonnement($id, $validatedData);
             return $this->sendResponse(
-                [],
+                $abonnement,
                 'Abonnement souscrit avec succès.'
             );
         } catch (ModelNotFoundException $e) {
             return $this->sendError('Abonnement non trouvé !', ['error' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            return $this->sendError('Erreur lors de la souscription à l\'abonnement.', ['error' => $e->getMessage()], 500);
         }
     }
 }

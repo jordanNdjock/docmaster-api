@@ -4,9 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AbonnementUser extends Model
 {
+
+    public $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
         'abonnement_id',
@@ -29,6 +33,11 @@ class AbonnementUser extends Model
         'date_debut' => 'datetime',
         'date_expiration' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        static::creating(fn($m) => $m->id = (string) Str::uuid());
+    }
 
     public function user()
     {

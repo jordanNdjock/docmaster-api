@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('abonnement_users', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->uuid('user_id');
             $table->uuid('abonnement_id');
             $table->boolean('actif')->default(false);

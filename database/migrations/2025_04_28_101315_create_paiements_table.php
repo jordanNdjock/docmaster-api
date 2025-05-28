@@ -12,6 +12,7 @@ class CreatePaiementsTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('transaction_id');
             $table->boolean('etat')->default(false);
+            $table->decimal('montant', 8, 0);
             $table->boolean('supprime')->default(false);
             $table->timestamps();
 

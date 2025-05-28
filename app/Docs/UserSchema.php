@@ -69,6 +69,11 @@ use OpenApi\Annotations as OA;
  *     example="TESTCODE"
  *   ),
  *   @OA\Property(
+ *     property="solde",
+ *     type="string",
+ *     example="100"
+ *   ),
+ *   @OA\Property(
  *     property="supprime",
  *     type="boolean",
  *     example=false

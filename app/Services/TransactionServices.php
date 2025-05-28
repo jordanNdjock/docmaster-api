@@ -85,6 +85,7 @@ class TransactionServices
                         ]);  
                     } else {
                         $status = $resPayment['data'] == 'PENDING' ? "En attente" : "Echec";
+
                         //Modification du statut de la transaction en PENDING ou FAILED
                         $transaction->update([
                             'statut' => $resPayment['data'] ?? "FAILED"
@@ -96,8 +97,8 @@ class TransactionServices
                             'montant'        => $transaction->montant,
                             'created_by'   => $user ? $user->email : 'unknown',
                         ]); 
-                        throw new \Exception("Statut de paiement : $status", 500);
                     }
+                    // on retourne la transaction que ce soit failed ou success
                     return $transaction;
             }else{
                 throw new \Exception("Échec de l'appel API avec code HTTP : ".$response->body() . $response->status());

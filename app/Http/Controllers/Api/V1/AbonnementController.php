@@ -171,14 +171,25 @@ class AbonnementController
     {
         $validatedData = $request->validated();
         try {
-            $abonnement = $this->abonnementServices->subscribeToAbonnement($id, $validatedData);
+             $abonnement = $this->abonnementServices->subscribeToAbonnement($id, $validatedData);
+             $status = $abonnement?->statut;
+
+             if ($status === 'FAILED' || $status === 'PENDING') {
+                return $this->sendError(
+                    'Erreur lors de la souscription à l\'abonnement.',
+                    [$abonnement],
+                    402
+                );
+             }
+             
             return $this->sendResponse(
                 $abonnement,
                 'Abonnement souscrit avec succès.'
             );
         } catch (ModelNotFoundException $e) {
             return $this->sendError('Abonnement non trouvé !', ['error' => $e->getMessage()], 404);
-        } catch (\Exception $e) {
+        } 
+        catch (\Exception $e) {
             return $this->sendError('Erreur lors de la souscription à l\'abonnement.', ['error' => $e->getMessage()], 500);
         }
     }

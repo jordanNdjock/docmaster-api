@@ -129,14 +129,14 @@ return [
         
         'user_actions' => [
         'driver'    => 'daily',
-        'path'      => storage_path('logs/user_actions.log'),
+        'path'      => storage_path('logs/users/user_actions.log'),
         'level'     => env('LOG_LEVEL', 'debug'),
         'days'      => 14,
         ],
 
         'admin_actions' => [
         'driver'    => 'daily',
-        'path'      => storage_path('logs/admin_actions.log'),
+        'path'      => storage_path('logs/admin/admin_actions.log'),
         'level'     => env('LOG_LEVEL', 'debug'),
         'days'      => 14,
         ],

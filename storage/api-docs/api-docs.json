@@ -21,7 +21,7 @@
                     "Authentification"
                 ],
                 "summary": "Authentification d'un utilisateur et retour d'un accès token",
-                "operationId": "19aa8d21ff383791040be577bd780348",
+                "operationId": "8b1ca12fe82a8104a6fbb70f5e149956",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -96,7 +96,7 @@
                 ],
                 "summary": "Déconnexion de l'utilisateur",
                 "description": "Nécessite un token Bearer dans l'en-tête Authorization",
-                "operationId": "3f1d0e5acee73e3339171b663c5df47e",
+                "operationId": "27275bf89a63f0655982adc39f1b8535",
                 "responses": {
                     "200": {
                         "description": "Déconnexion réussie",
@@ -189,6 +189,10 @@
                     "code_invitation": {
                         "type": "string",
                         "example": "TESTCODE"
+                    },
+                    "solde": {
+                        "type": "string",
+                        "example": "100"
                     },
                     "supprime": {
                         "type": "boolean",

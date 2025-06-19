@@ -177,8 +177,13 @@ class AbonnementServices
      */
     public function subscribeToAbonnement(string $id, array $data): ?Transaction
     {
-        Abonnement::active()->findOrFail($id);
+        $abonnement = Abonnement::active()->findOrFail($id);
         $user = auth()->user();
+        $verif = $data['montant'] === $abonnement->montant;
+
+        if(!$verif)
+            throw new Exception('Montant de l\'abonnement incorrect, Veuillez entrer un montant correct !');
+
 
         $abonnementUser = AbonnementUser::where('user_id', $user->id)->first();
 
@@ -193,10 +198,10 @@ class AbonnementServices
         $transaction = $this->transactionServices->initiateTransaction($data, $abonnementUser->id);
 
         return $transaction;
-
     }
 
-    public function verifyUserAbonnement(): Exception
+
+    public function verifyUserAbonnement()
     {
         $user = auth()->user();
         if ($user->abonnementUser) {

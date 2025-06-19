@@ -9,7 +9,6 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class TransactionServices
 {
@@ -68,34 +67,42 @@ class TransactionServices
                             'montant' => $transactionData['montant']
                         ]);
                         
-                        // Mise à jour de l'abonnement car réussie 
-                        $abonnementUser = AbonnementUser::where('user_id', $user->id)->first();
-                        $abonnementUser->update([
-                            'actif' => true,
-                            'date_debut' => now(),
-                            'date_expiration' => now()->addYear()
-                        ]);
+                        // Mise à jour de l'abonnement ou du docmaster car réussie
+                        if($transaction->transactionable_type === 'docmaster'){
+                            //
+                            $transactionType->update([
+                                'credit' => (int) $transaction->montant/2,
+                                'debit' => (int) $transaction->montant/2,
+                                'etat_docmaster' => 'Récupération'
+                            ]);
+                        } else if($transaction->transactionable_type === 'abonnement'){
+                            $transactionType->update([
+                                'actif' => true,
+                                'date_debut' => now(),
+                                'date_expiration' => now()->addYear()
+                            ]);
+                        }
 
                         //Log pour la transaction réussie
                         Log::channel('user_actions')->info('Transaction réussie ', [
                             'id'           => $transaction->id,
                             'type_transaction' => $transaction->transactionable_type,
                             'montant'        => $transaction->montant,
-                            'created_by'   => $user ? $user->email : 'unknown',
+                            'initiated_by'   => $user ? $user->email : 'unknown',
                         ]);  
                     } else {
-                        $status = $resPayment['data'] == 'PENDING' ? "En attente" : "Echec";
 
                         //Modification du statut de la transaction en PENDING ou FAILED
                         $transaction->update([
                             'statut' => $resPayment['data'] ?? "FAILED"
                         ]);
 
+                        //Log pour la transaction échouée
                         Log::channel('user_actions')->info('Transaction échouée', [
                             'id'           => $transaction->id,
                             'type_transaction' => $transaction->transactionable_type,
                             'montant'        => $transaction->montant,
-                            'created_by'   => $user ? $user->email : 'unknown',
+                            'initiated_by'   => $user ? $user->email : 'unknown',
                         ]); 
                     }
                     // on retourne la transaction que ce soit failed ou success

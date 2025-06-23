@@ -167,6 +167,41 @@ class AbonnementController
     /**
      * Subscribe to an abonnement
      */
+    /**
+     * @OA\Post(
+     *   path="/api/abonnement/{id}/subscribe",
+     *   tags={"Abonnements"},
+     *   summary="Souscrire à un abonnement",
+     *   description="Nécessite un token Bearer dans l'en-tête Authorization",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\Parameter(name="id", in="path", required=true, description="ID de l'abonnement", @OA\Schema(type="string")),
+     *
+     *   @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(
+     *       @OA\Property(property="montant", type="integer", example="10000"),
+     *       @OA\Property(property="tel", type="string", example="+237678788778"),
+     *       @OA\Property(property="payment_method", type="string", example="MTN_MOMO | ORANGE_MONEY"),
+     *       @OA\Property(property="transactionable_type", type="string", example="abonnement")
+     *     )
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Abonnement souscrit avec succès",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=true),
+     *       @OA\Property(property="data", ref="#/components/schemas/TransactionAbonnement"),
+     *       @OA\Property(property="message", type="string", example="Abonnement souscrit avec succès.")
+     *     )
+     *   ),
+     *   @OA\Response(response=402, description="Échec de la souscription"),
+     *   @OA\Response(response=500, description="Erreur serveur")
+     * )
+     */
+
     public function subscribe(TransactionRequest $request, string $id): JsonResponse
     {
         $validatedData = $request->validated();

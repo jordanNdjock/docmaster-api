@@ -24,7 +24,7 @@ use OpenApi\Annotations as OA;
  *  @OA\Property(
  *     property="prenom",
  *     type="string",
- *     example="Joseph"
+ *     example="Joseph Johnson"
  *   ),
  *  @OA\Property(
  *     property="nom_utilisateur",
@@ -34,7 +34,7 @@ use OpenApi\Annotations as OA;
  *  @OA\Property(
  *     property="initial_2_prenom",
  *     type="string",
- *     example="JD"
+ *     example="JJ"
  *   ),
  *  @OA\Property(
  *    property="tel",
@@ -70,8 +70,8 @@ use OpenApi\Annotations as OA;
  *   ),
  *   @OA\Property(
  *     property="solde",
- *     type="string",
- *     example="100"
+ *     type="number",
+ *     example=100
  *   ),
  *   @OA\Property(
  *     property="supprime",

@@ -15,6 +15,91 @@
     },
     "paths": {
         "/api": {},
+        "/api/abonnement/{id}/subscribe": {
+            "post": {
+                "tags": [
+                    "Abonnements"
+                ],
+                "summary": "Souscrire à un abonnement",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "8269136dadec6459e8dcd5683e6a9637",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de l'abonnement",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "montant": {
+                                        "type": "integer",
+                                        "example": "10000"
+                                    },
+                                    "tel": {
+                                        "type": "string",
+                                        "example": "+237678788778"
+                                    },
+                                    "payment_method": {
+                                        "type": "string",
+                                        "example": "MTN_MOMO | ORANGE_MONEY"
+                                    },
+                                    "transactionable_type": {
+                                        "type": "string",
+                                        "example": "abonnement"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Abonnement souscrit avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/TransactionAbonnement"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Abonnement souscrit avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "Échec de la souscription"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/auth/login": {
             "post": {
                 "tags": [
@@ -89,6 +174,153 @@
                 }
             }
         },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "summary": "Enregistrement d'un nouvel utilisateur",
+                "operationId": "8f7237208878d2e15ab53c3639e56c03",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "prenom",
+                                    "nom_famille",
+                                    "nom_utilisateur",
+                                    "email",
+                                    "mdp",
+                                    "tel",
+                                    "date_naissance"
+                                ],
+                                "properties": {
+                                    "prenom": {
+                                        "type": "string",
+                                        "example": "Jean Michel"
+                                    },
+                                    "nom_famille": {
+                                        "type": "string",
+                                        "example": "Atangana"
+                                    },
+                                    "nom_utilisateur": {
+                                        "type": "string",
+                                        "example": "jmatango"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "jma@example.com"
+                                    },
+                                    "mdp": {
+                                        "type": "string",
+                                        "example": "secret123"
+                                    },
+                                    "tel": {
+                                        "type": "string",
+                                        "example": "+237690112233"
+                                    },
+                                    "date_naissance": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "1995-05-21"
+                                    },
+                                    "localisation": {
+                                        "type": "string",
+                                        "example": "Yaoundé"
+                                    },
+                                    "infos_paiement": {
+                                        "type": "string",
+                                        "example": "Mobile Money"
+                                    },
+                                    "photo_url": {
+                                        "description": "Fichier image (optionnel)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Utilisateur enregistré avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "$ref": "#/components/schemas/User"
+                                                },
+                                                "access_token": {
+                                                    "type": "string",
+                                                    "example": "1|gChmEahrYbZLpZMOdxCmokA0ntqqtwaXTokCkeHld7172a26"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Compte créé avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Données de validation incorrectes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Les données fournies sont invalides."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erreur interne du serveur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Erreur interne lors de la création du compte."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/auth/logout": {
             "post": {
                 "tags": [
@@ -135,10 +367,1185 @@
                     }
                 ]
             }
+        },
+        "/api/declaration": {
+            "get": {
+                "tags": [
+                    "Docmasters"
+                ],
+                "summary": "Lister toutes les déclarations",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "a101191f8b3d361acf612ea6e67656a2",
+                "responses": {
+                    "200": {
+                        "description": "Liste paginée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "declarations": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Docmaster"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "type": "object",
+                                                    "example": {
+                                                        "total": 20,
+                                                        "current_page": 1,
+                                                        "per_page": 10
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Liste des déclarations récupérée avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Docmasters"
+                ],
+                "summary": "Déclarer un document trouvé ou perdu",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "8d3eb4e28eaad378cd309aec76042699",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "type_docmaster": {
+                                        "type": "string",
+                                        "example": "Chercher | Trouver"
+                                    },
+                                    "date_action": {
+                                        "type": "string",
+                                        "example": "2024-09-23"
+                                    },
+                                    "type_document_id": {
+                                        "type": "string",
+                                        "example": "uuid-type-doc"
+                                    },
+                                    "nom_proprietaire": {
+                                        "type": "string",
+                                        "example": "Michel John"
+                                    },
+                                    "titre_document": {
+                                        "type": "string",
+                                        "example": "Acte de Naissance"
+                                    },
+                                    "date_expiration": {
+                                        "type": "string",
+                                        "example": "2022-08-24"
+                                    },
+                                    "nom_trouveur": {
+                                        "type": "string",
+                                        "example": "Jean Dupont"
+                                    },
+                                    "tel_trouveur": {
+                                        "type": "string",
+                                        "example": "+237693899890"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Déclaration enregistrée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Docmaster"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Déclaration créée avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/declaration/{id}": {
+            "get": {
+                "tags": [
+                    "Docmasters"
+                ],
+                "summary": "Afficher une déclaration",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "8360777987c5a7405d0707df28b8a0bc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Déclaration récupérée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Docmaster"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Déclaration recupérée avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Docmasters"
+                ],
+                "summary": "Archiver une déclaration",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "c682e7f6bdd4239f92f03509f99e3902",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Déclaration archivée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Déclaration archivée avec succès."
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/declaration/{id}/restore": {
+            "post": {
+                "tags": [
+                    "Docmasters"
+                ],
+                "summary": "Restaurer une déclaration",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "49ca9437abeeee8832cb928c830c9fe3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Déclaration restaurée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Déclaration restaurée avec succès."
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/declaration/{id}/force-delete": {
+            "delete": {
+                "tags": [
+                    "Docmasters"
+                ],
+                "summary": "Suppression définitive d'une déclaration",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "96e359636b772840ab6921247bddeee1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Déclaration supprimée définitivement",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Déclaration supprimée définitivement avec succès."
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/declaration/archived": {
+            "get": {
+                "tags": [
+                    "Docmasters"
+                ],
+                "summary": "Lister les déclarations archivées",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "73e7c31ffd7b43b2726a708ce01f368f",
+                "responses": {
+                    "200": {
+                        "description": "Liste des déclarations archivées",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "archived_declarations": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Docmaster"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Liste des déclarations supprimées récupérée avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/declaration/search": {
+            "get": {
+                "tags": [
+                    "Docmasters"
+                ],
+                "summary": "Rechercher une déclaration par titre",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "0f09f2502ada5ca670c9e06b6d7be3cf",
+                "parameters": [
+                    {
+                        "name": "titre",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Résultats de la recherche",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "docmasters": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Docmaster"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Liste des déclarations récupérée avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/document": {
+            "get": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Liste des documents de l'utilisateur authentifié",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "17924497db843e276fc8a03cca6d6574",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste paginée",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user_documents": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Document"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "type": "object",
+                                                    "example": {
+                                                        "total": 20,
+                                                        "current_page": 1,
+                                                        "per_page": 10
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Liste des documents de l'utilisateur récupérée avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Créer un document",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "85804a39a2c423b4aae96724d2b0ba89",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "type_document_id",
+                                    "nom_proprietaire",
+                                    "titre",
+                                    "fichier_document"
+                                ],
+                                "properties": {
+                                    "type_document_id": {
+                                        "type": "string",
+                                        "example": "uuid-type-doc"
+                                    },
+                                    "nom_proprietaire": {
+                                        "type": "string",
+                                        "example": "Jean Michel"
+                                    },
+                                    "titre": {
+                                        "type": "string",
+                                        "example": "Permis de conduire"
+                                    },
+                                    "date_expiration": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-12-31"
+                                    },
+                                    "fichier_document": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Document créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Document"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "document créé avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/document/{id}": {
+            "get": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Afficher un document",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "a64b467a6bdacc7af4279c936970a1f4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Document récupéré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Document"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Document récupéré avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Document non trouvé"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Mettre à jour un document",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "d60a177265ceb59f9d0fabbb4d2b457c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "type_document_id",
+                                    "nom_proprietaire",
+                                    "titre",
+                                    "fichier_document"
+                                ],
+                                "properties": {
+                                    "type_document_id": {
+                                        "type": "string",
+                                        "example": "uuid-type-doc"
+                                    },
+                                    "nom_proprietaire": {
+                                        "type": "string",
+                                        "example": "Jean Michel"
+                                    },
+                                    "titre": {
+                                        "type": "string",
+                                        "example": "Permis de conduire"
+                                    },
+                                    "date_expiration": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-12-31"
+                                    },
+                                    "fichier_document": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Document modifié",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Document"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "document modifié avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Archiver un document",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "b524df9bd74a189b47c69e0b4112c006",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Document archivé avec succès",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Document archivé avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/document/{id}/restore": {
+            "post": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Restaurer un document",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "1b1820cac6fcfb9b37fac7f5ced8cd60",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Document restauré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Document restauré avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/document/{id}/force-delete": {
+            "delete": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Supprimer définitivement un document",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "2f8a2227cd82d9c6093af31961fed315",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Document supprimé définitivement",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Document supprimé définitivement avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/document/archived": {
+            "get": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Lister les documents archivés",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "9746005c267ee15f9272f96905e3e708",
+                "responses": {
+                    "200": {
+                        "description": "Liste des documents archivés",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "archived_documents": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Document"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Liste des documents supprimés récupérée avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
         "schemas": {
+            "Docmaster": {
+                "required": [
+                    "id",
+                    "document_id",
+                    "type_docmaster",
+                    "etat_docmaster"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "uuid-docmaster-1"
+                    },
+                    "doc_chercheur_id": {
+                        "type": "string",
+                        "example": "uuid-user-1"
+                    },
+                    "doc_trouveur_id": {
+                        "type": "string",
+                        "example": "uuid-user-2"
+                    },
+                    "document_id": {
+                        "type": "string",
+                        "example": "uuid-doc"
+                    },
+                    "type_docmaster": {
+                        "type": "string",
+                        "example": "Trouver"
+                    },
+                    "date_action": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-06-01"
+                    },
+                    "nom_trouveur": {
+                        "type": "string",
+                        "example": "Jean Michel"
+                    },
+                    "infos_docs": {
+                        "type": "string",
+                        "example": "Trouvé au carrefour Emia"
+                    },
+                    "tel_trouveur": {
+                        "type": "string",
+                        "example": "+237690000000"
+                    },
+                    "etat_docmaster": {
+                        "type": "string",
+                        "example": "Trouvé"
+                    },
+                    "nombre_notif": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "credit": {
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "debit": {
+                        "type": "integer",
+                        "example": 0
+                    },
+                    "confirm": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "code_confirm": {
+                        "type": "string",
+                        "example": "XYZ123"
+                    },
+                    "supprime": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                },
+                "type": "object"
+            },
+            "Document": {
+                "required": [
+                    "id",
+                    "user_id",
+                    "type_document_id",
+                    "nom_proprietaire",
+                    "titre",
+                    "fichier_url"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "uuid-1234"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "example": "uuid-user-1"
+                    },
+                    "type_document_id": {
+                        "type": "string",
+                        "example": "uuid-type-doc"
+                    },
+                    "nom_proprietaire": {
+                        "type": "string",
+                        "example": "Jean Michel"
+                    },
+                    "titre": {
+                        "type": "string",
+                        "example": "Acte de naissance"
+                    },
+                    "date_expiration": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2026-12-31"
+                    },
+                    "fichier_url": {
+                        "type": "string",
+                        "example": "documents/acte-naissance.pdf"
+                    },
+                    "trouve": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "sauvegarde": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "signale": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                },
+                "type": "object"
+            },
+            "Abonnement": {
+                "title": "Abonnement",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "uuid-1234-5678"
+                    },
+                    "titre": {
+                        "type": "string",
+                        "example": "Premium"
+                    },
+                    "nombre_docs_par_type": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "montant": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 1000
+                    },
+                    "supprime": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                },
+                "type": "object"
+            },
+            "TransactionAbonnement": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "uuid-transaction-1"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "example": "uuid-user-1"
+                    },
+                    "transactionable_id": {
+                        "type": "string",
+                        "example": "uuid-obj"
+                    },
+                    "transactionable_type": {
+                        "type": "string",
+                        "example": "App\\Models\\Abonnement"
+                    },
+                    "statut": {
+                        "type": "string",
+                        "example": "SUCCESS"
+                    },
+                    "montant": {
+                        "type": "number",
+                        "example": 10000
+                    },
+                    "identifiant": {
+                        "type": "string",
+                        "example": "TXN-2024-0001"
+                    },
+                    "supprime": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                },
+                "type": "object"
+            },
+            "TransactionDocmaster": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "uuid-transaction-1"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "example": "uuid-user-1"
+                    },
+                    "transactionable_id": {
+                        "type": "string",
+                        "example": "uuid-obj"
+                    },
+                    "transactionable_type": {
+                        "type": "string",
+                        "example": "App\\Models\\Docmaster"
+                    },
+                    "statut": {
+                        "type": "string",
+                        "example": "SUCCESS"
+                    },
+                    "montant": {
+                        "type": "number",
+                        "example": 10000
+                    },
+                    "identifiant": {
+                        "type": "string",
+                        "example": "TXN-2024-0001"
+                    },
+                    "supprime": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "title": "User",
                 "description": "Représentation d'un utilisateur",
@@ -154,7 +1561,7 @@
                     },
                     "prenom": {
                         "type": "string",
-                        "example": "Joseph"
+                        "example": "Joseph Johnson"
                     },
                     "nom_utilisateur": {
                         "type": "string",
@@ -162,7 +1569,7 @@
                     },
                     "initial_2_prenom": {
                         "type": "string",
-                        "example": "JD"
+                        "example": "JJ"
                     },
                     "tel": {
                         "type": "string",
@@ -191,8 +1598,8 @@
                         "example": "TESTCODE"
                     },
                     "solde": {
-                        "type": "string",
-                        "example": "100"
+                        "type": "number",
+                        "example": 100
                     },
                     "supprime": {
                         "type": "boolean",
@@ -215,8 +1622,20 @@
     },
     "tags": [
         {
+            "name": "Abonnements",
+            "description": "Abonnements"
+        },
+        {
             "name": "Authentification",
             "description": "Authentification"
+        },
+        {
+            "name": "Docmasters",
+            "description": "Docmasters"
+        },
+        {
+            "name": "Documents",
+            "description": "Documents"
         }
     ]
 }

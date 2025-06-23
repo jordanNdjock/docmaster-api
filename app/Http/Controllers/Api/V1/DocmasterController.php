@@ -21,6 +21,29 @@ class DocmasterController
     /**
      * Display a listing of the resource.
      */
+    /**
+     * @OA\Get(
+     *   path="/api/declaration",
+     *   tags={"Docmasters"},
+     *   summary="Lister toutes les déclarations",
+     *   description="Nécessite un token Bearer dans l'en-tête Authorization",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\Response(
+     *     response=200,
+     *     description="Liste paginée",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=true),
+     *       @OA\Property(property="data", type="object",
+     *         @OA\Property(property="declarations", type="array", @OA\Items(ref="#/components/schemas/Docmaster")),
+     *         @OA\Property(property="meta", type="object", example={"total": 20, "current_page": 1, "per_page": 10})
+     *       ),
+     *       @OA\Property(property="message", type="string", example="Liste des déclarations récupérée avec succès.")
+     *     )
+     *   )
+     * )
+     */
     public function index(Request $request)
     {
         $per_page = $request->query('per_page', 10);
@@ -38,6 +61,27 @@ class DocmasterController
 
     /**
      * Display the specified resource.
+     */
+    /**
+     * @OA\Get(
+     *   path="/api/declaration/{id}",
+     *   tags={"Docmasters"},
+     *   summary="Afficher une déclaration",
+     *   description="Nécessite un token Bearer dans l'en-tête Authorization",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="string")),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Déclaration récupérée",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=true),
+     *       @OA\Property(property="data", ref="#/components/schemas/Docmaster"),
+     *       @OA\Property(property="message", type="string", example="Déclaration recupérée avec succès.")
+     *     )
+     *   )
+     * )
      */
     public function show(string $id)
     {
@@ -63,6 +107,27 @@ class DocmasterController
     /**
      * Remove the specified resource from storage.
      */
+    /**
+     * @OA\Delete(
+     *   path="/api/declaration/{id}",
+     *   tags={"Docmasters"},
+     *   summary="Archiver une déclaration",
+     *   description="Nécessite un token Bearer dans l'en-tête Authorization",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="string")),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Déclaration archivée",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=true),
+     *       @OA\Property(property="message", type="string", example="Déclaration archivée avec succès."),
+     *       @OA\Property(property="data", type="object", example={})
+     *     )
+     *   )
+     * )
+     */
     public function destroy(string $id)
     {
         try{
@@ -80,6 +145,27 @@ class DocmasterController
      * Restore the specified resource from storage.
      * @param string $id
      * @return JsonResponse
+     */
+    /**
+     * @OA\Post(
+     *   path="/api/declaration/{id}/restore",
+     *   tags={"Docmasters"},
+     *   summary="Restaurer une déclaration",
+     *   description="Nécessite un token Bearer dans l'en-tête Authorization",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="string")),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Déclaration restaurée",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=true),
+     *       @OA\Property(property="message", type="string", example="Déclaration restaurée avec succès."),
+     *       @OA\Property(property="data", type="object", example={})
+     *     )
+     *   )
+     * )
      */
     public function restore(string $id)
     {
@@ -99,6 +185,27 @@ class DocmasterController
      * @param string $id
      * @return JsonResponse
      */
+    /**
+     * @OA\Delete(
+     *   path="/api/declaration/{id}/force-delete",
+     *   tags={"Docmasters"},
+     *   summary="Suppression définitive d'une déclaration",
+     *   description="Nécessite un token Bearer dans l'en-tête Authorization",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="string")),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Déclaration supprimée définitivement",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=true),
+     *       @OA\Property(property="message", type="string", example="Déclaration supprimée définitivement avec succès."),
+     *       @OA\Property(property="data", type="object", example={})
+     *     )
+     *   )
+     * )
+     */
     public function forceDelete(string $id)
     {
         try {
@@ -114,6 +221,31 @@ class DocmasterController
 
     /**
      * Display a listing of the archived resource.
+     */
+    /**
+     * @OA\Get(
+     *   path="/api/declaration/archived",
+     *   tags={"Docmasters"},
+     *   summary="Lister les déclarations archivées",
+     *   description="Nécessite un token Bearer dans l'en-tête Authorization",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\Response(
+     *     response=200,
+     *     description="Liste des déclarations archivées",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=true),
+     *       @OA\Property(
+     *         property="data",
+     *         type="object",
+     *         @OA\Property(property="archived_declarations", type="array", @OA\Items(ref="#/components/schemas/Docmaster")),
+     *         @OA\Property(property="meta", type="object")
+     *       ),
+     *       @OA\Property(property="message", type="string", example="Liste des déclarations supprimées récupérée avec succès.")
+     *     )
+     *   )
+     * )
      */
     public function archived(Request $request): JsonResponse
     {
@@ -136,6 +268,30 @@ class DocmasterController
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+    /**
+     * @OA\Get(
+     *   path="/api/declaration/search",
+     *   tags={"Docmasters"},
+     *   summary="Rechercher une déclaration par titre",
+     *   description="Nécessite un token Bearer dans l'en-tête Authorization",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\Parameter(name="titre", in="query", required=false, @OA\Schema(type="string")),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Résultats de la recherche",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=true),
+     *       @OA\Property(property="data", type="object",
+     *         @OA\Property(property="docmasters", type="array", @OA\Items(ref="#/components/schemas/Docmaster")),
+     *         @OA\Property(property="meta", type="object")
+     *       ),
+     *       @OA\Property(property="message", type="string", example="Liste des déclarations récupérée avec succès.")
+     *     )
+     *   )
+     * )
+     */
     public function search(Request $request){
         $per_page = $request->query('per_page', 10);
         $page = $request->query('page', 1);
@@ -153,6 +309,39 @@ class DocmasterController
 
     /**
      * declare a document missed/find
+     */
+    /**
+     * @OA\Post(
+     *   path="/api/declaration",
+     *   tags={"Docmasters"},
+     *   summary="Déclarer un document trouvé ou perdu",
+     *   description="Nécessite un token Bearer dans l'en-tête Authorization",
+     *   security={
+     *     {"bearerAuth": {}}
+     *   },
+     *   @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(
+     *       @OA\Property(property="type_docmaster", type="string", example="Chercher | Trouver"),
+     *       @OA\Property(property="date_action", type="string", example="2024-09-23"),
+     *       @OA\Property(property="type_document_id", type="string", example="uuid-type-doc"),
+     *       @OA\Property(property="nom_proprietaire", type="string", example="Michel John"),
+     *       @OA\Property(property="titre_document", type="string", example="Acte de Naissance"),
+     *       @OA\Property(property="date_expiration", type="string", example="2022-08-24"),
+     *       @OA\Property(property="nom_trouveur", type="string", example="Jean Dupont"),
+     *       @OA\Property(property="tel_trouveur", type="string", example="+237693899890"),
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="Déclaration enregistrée",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=true),
+     *       @OA\Property(property="data", ref="#/components/schemas/Docmaster"),
+     *       @OA\Property(property="message", type="string", example="Déclaration créée avec succès.")
+     *     )
+     *   )
+     * )
      */
     public function store(DocmasterRequest $request)
     {

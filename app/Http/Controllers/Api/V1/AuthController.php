@@ -90,6 +90,64 @@ class AuthController extends Controller
     }
 
 
+    /**
+     * @OA\Post(
+     *   path="/api/auth/register",
+     *   tags={"Authentification"},
+     *   summary="Enregistrement d'un nouvel utilisateur",
+     *
+     *   @OA\RequestBody(
+     *     required=true,
+     *     @OA\JsonContent(
+     *       required={"prenom", "nom_famille", "nom_utilisateur", "email", "mdp", "tel", "date_naissance"},
+     *       @OA\Property(property="prenom", type="string", example="Jean Michel"),
+     *       @OA\Property(property="nom_famille", type="string", example="Atangana"),
+     *       @OA\Property(property="nom_utilisateur", type="string", example="jmatango"),
+     *       @OA\Property(property="email", type="string", format="email", example="jma@example.com"),
+     *       @OA\Property(property="mdp", type="string", example="secret123"),
+     *       @OA\Property(property="tel", type="string", example="+237690112233"),
+     *       @OA\Property(property="date_naissance", type="string", format="date", example="1995-05-21"),
+     *       @OA\Property(property="localisation", type="string", example="Yaoundé"),
+     *       @OA\Property(property="infos_paiement", type="string", example="Mobile Money"),
+     *       @OA\Property(property="photo_url", type="string", format="binary", description="Fichier image (optionnel)")
+     *     )
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=201,
+     *     description="Utilisateur enregistré avec succès",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=true),
+     *       @OA\Property(
+     *         property="data",
+     *         type="object",
+     *         @OA\Property(property="user", ref="#/components/schemas/User"),
+     *         @OA\Property(property="access_token", type="string", example="1|gChmEahrYbZLpZMOdxCmokA0ntqqtwaXTokCkeHld7172a26"),
+     *       ),
+     *
+     *       @OA\Property(property="message", type="string", example="Compte créé avec succès.")
+     *     )
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=422,
+     *     description="Données de validation incorrectes",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=false),
+     *       @OA\Property(property="message", type="string", example="Les données fournies sont invalides.")
+     *     )
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=500,
+     *     description="Erreur interne du serveur",
+     *     @OA\JsonContent(
+     *       @OA\Property(property="success", type="boolean", example=false),
+     *       @OA\Property(property="message", type="string", example="Erreur interne lors de la création du compte.")
+     *     )
+     *   )
+     * )
+     */
 
     public function register(RegisterRequest $request){
         $credentials = $request->validated();

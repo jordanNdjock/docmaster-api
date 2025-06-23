@@ -38,12 +38,12 @@ class AuthServices
                 'email'        => $userCreated->email,
                 'created_by'   => $user ? $user->email : 'unknown',
             ]);           
-        $token = $user
+        $token = $userCreated
                 ->createToken("access_token_of_{$userCreated->email}")
                 ->plainTextToken;
 
         return [
-            'user'  => $user,
+            'user'  => $userCreated,
             'token' => $token,
         ];
     }

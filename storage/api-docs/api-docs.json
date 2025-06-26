@@ -46,7 +46,7 @@
                                     },
                                     "tel": {
                                         "type": "string",
-                                        "example": "+237678788778"
+                                        "example": "237678788778"
                                     },
                                     "payment_method": {
                                         "type": "string",
@@ -371,7 +371,7 @@
         "/api/declaration": {
             "get": {
                 "tags": [
-                    "Docmasters"
+                    "Déclarations"
                 ],
                 "summary": "Lister toutes les déclarations",
                 "description": "Nécessite un token Bearer dans l'en-tête Authorization",
@@ -425,7 +425,7 @@
             },
             "post": {
                 "tags": [
-                    "Docmasters"
+                    "Déclarations"
                 ],
                 "summary": "Déclarer un document trouvé ou perdu",
                 "description": "Nécessite un token Bearer dans l'en-tête Authorization",
@@ -509,7 +509,7 @@
         "/api/declaration/{id}": {
             "get": {
                 "tags": [
-                    "Docmasters"
+                    "Déclarations"
                 ],
                 "summary": "Afficher une déclaration",
                 "description": "Nécessite un token Bearer dans l'en-tête Authorization",
@@ -557,7 +557,7 @@
             },
             "delete": {
                 "tags": [
-                    "Docmasters"
+                    "Déclarations"
                 ],
                 "summary": "Archiver une déclaration",
                 "description": "Nécessite un token Bearer dans l'en-tête Authorization",
@@ -608,7 +608,7 @@
         "/api/declaration/{id}/restore": {
             "post": {
                 "tags": [
-                    "Docmasters"
+                    "Déclarations"
                 ],
                 "summary": "Restaurer une déclaration",
                 "description": "Nécessite un token Bearer dans l'en-tête Authorization",
@@ -659,7 +659,7 @@
         "/api/declaration/{id}/force-delete": {
             "delete": {
                 "tags": [
-                    "Docmasters"
+                    "Déclarations"
                 ],
                 "summary": "Suppression définitive d'une déclaration",
                 "description": "Nécessite un token Bearer dans l'en-tête Authorization",
@@ -710,7 +710,7 @@
         "/api/declaration/archived": {
             "get": {
                 "tags": [
-                    "Docmasters"
+                    "Déclarations"
                 ],
                 "summary": "Lister les déclarations archivées",
                 "description": "Nécessite un token Bearer dans l'en-tête Authorization",
@@ -761,7 +761,7 @@
         "/api/declaration/search": {
             "get": {
                 "tags": [
-                    "Docmasters"
+                    "Déclarations"
                 ],
                 "summary": "Rechercher une déclaration par titre",
                 "description": "Nécessite un token Bearer dans l'en-tête Authorization",
@@ -1311,6 +1311,202 @@
                     }
                 ]
             }
+        },
+        "/api/paiement": {
+            "get": {
+                "tags": [
+                    "Paiements"
+                ],
+                "summary": "Récupérer la liste des paiements de l'utilisateur connecté",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "d0c077b97faa327cf8b8940006aa80e3",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste paginée des paiements",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "paiements": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Paiement"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "type": "object",
+                                                    "example": {
+                                                        "total": 5,
+                                                        "current_page": 1,
+                                                        "per_page": 10
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Liste des paiements de l'utilisateur récupérée avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/retrait": {
+            "get": {
+                "tags": [
+                    "Retraits"
+                ],
+                "summary": "Lister les retraits de l'utilisateur connecté",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "5dbe1e7390fac46d3938a24513be7362",
+                "responses": {
+                    "200": {
+                        "description": "Liste paginée des retraits",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "retraits": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Retrait"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Liste des retraits de l'utilisateur récupérée avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Retraits"
+                ],
+                "summary": "Effectuer un retrait",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "05bc2269d9e5015770ca61566deb662f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "tel": {
+                                        "type": "string",
+                                        "example": "+237690000000"
+                                    },
+                                    "montant": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 2500
+                                    },
+                                    "transactionable_type": {
+                                        "type": "string",
+                                        "example": "retrait"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Retrait réussi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Retrait"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Retrait effectué avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "402": {
+                        "description": "Erreur lors du retrait"
+                    },
+                    "500": {
+                        "description": "Erreur serveur"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -1358,7 +1554,7 @@
                     },
                     "tel_trouveur": {
                         "type": "string",
-                        "example": "+237690000000"
+                        "example": "237699800320"
                     },
                     "etat_docmaster": {
                         "type": "string",
@@ -1445,29 +1641,30 @@
                 },
                 "type": "object"
             },
-            "Abonnement": {
-                "title": "Abonnement",
+            "Paiement": {
+                "required": [
+                    "id",
+                    "transaction_id",
+                    "etat",
+                    "montant"
+                ],
                 "properties": {
                     "id": {
                         "type": "string",
-                        "example": "uuid-1234-5678"
+                        "example": "uuid-paiement-1"
                     },
-                    "titre": {
+                    "transaction_id": {
                         "type": "string",
-                        "example": "Premium"
+                        "example": "uuid-transaction-1"
                     },
-                    "nombre_docs_par_type": {
-                        "type": "integer",
-                        "example": 5
+                    "etat": {
+                        "type": "string",
+                        "example": "SUCCESS"
                     },
                     "montant": {
                         "type": "number",
                         "format": "float",
-                        "example": 1000
-                    },
-                    "supprime": {
-                        "type": "boolean",
-                        "example": false
+                        "example": 5000
                     }
                 },
                 "type": "object"
@@ -1573,7 +1770,7 @@
                     },
                     "tel": {
                         "type": "string",
-                        "example": "1234567890"
+                        "example": "237690098998"
                     },
                     "date_naissance": {
                         "type": "string",
@@ -1617,6 +1814,44 @@
                     }
                 },
                 "type": "object"
+            },
+            "Retrait": {
+                "required": [
+                    "id",
+                    "user_id",
+                    "tel",
+                    "montant",
+                    "etat"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "uuid-retrait-1"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "example": "uuid-user-1"
+                    },
+                    "etat": {
+                        "type": "string",
+                        "example": "True"
+                    },
+                    "tel": {
+                        "type": "string",
+                        "example": "237690387000"
+                    },
+                    "montant": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 1500
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-06-21T10:00:00Z"
+                    }
+                },
+                "type": "object"
             }
         }
     },
@@ -1630,12 +1865,20 @@
             "description": "Authentification"
         },
         {
-            "name": "Docmasters",
-            "description": "Docmasters"
+            "name": "Déclarations",
+            "description": "Déclarations"
         },
         {
             "name": "Documents",
             "description": "Documents"
+        },
+        {
+            "name": "Paiements",
+            "description": "Paiements"
+        },
+        {
+            "name": "Retraits",
+            "description": "Retraits"
         }
     ]
 }

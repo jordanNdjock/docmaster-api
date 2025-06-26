@@ -18,7 +18,7 @@ use OpenApi\Annotations as OA;
  *   @OA\Property(property="date_action", type="string", format="date", example="2025-06-01"),
  *   @OA\Property(property="nom_trouveur", type="string", example="Jean Michel"),
  *   @OA\Property(property="infos_docs", type="string", example="Trouvé au carrefour Emia"),
- *   @OA\Property(property="tel_trouveur", type="string", example="+237690000000"),
+ *   @OA\Property(property="tel_trouveur", type="string", example="237699800320"),
  *   @OA\Property(property="etat_docmaster", type="string", example="Trouvé"),
  *   @OA\Property(property="nombre_notif", type="integer", example=1),
  *   @OA\Property(property="credit", type="integer", example=100),

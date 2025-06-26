@@ -5,13 +5,16 @@ namespace App\Services;
 use App\Models\AbonnementUser;
 use App\Models\Docmaster;
 use App\Models\Paiement;
+use App\Models\Retrait;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class TransactionServices
 {
+    // fonction d'initiation de transaction de paiement
     public function initiateTransaction(array $transactionData, string $id): Transaction
     {
         return DB::transaction(function () use ($transactionData, $id){
@@ -143,4 +146,109 @@ class TransactionServices
         return $data ?? null;
     }
 
+    // fonction d'initiation de retrait
+    public function initiateWithdrawal(array $withdawalData){
+        return DB::transaction( function() use ($withdawalData){
+            $user = auth()->user();
+            $authcode = $this->generateAuthcode();
+
+            // savoir si le authcode est retourné
+            if($authcode != null){
+                $response = Http::withHeaders([
+                    "auth-code" => $authcode,
+                ])->asJson()->post('https://api.nokash.app/lapas-on-trans/trans/api-payout-request/407', [
+                     'payment_type' => "CM_MOBILEMONEY",
+                     'country' => "CM",
+                     'i_space_key' => env('NOKASH_I_SPACE_KEY'),
+                     'app_space_key' => env('NOKASH_APP_SPACE_KEY'),
+                     'user_data' => [
+                        'user_phone'=> $withdawalData['tel'] 
+                     ],
+                     'amount' => $withdawalData['montant'],
+                     'payment_method' => $withdawalData['payment_method'],
+                     'order_id' => Str::random(10)
+                ]);
+
+                if($response->successful()){
+                    $data = $response->json();
+                    $trans_id = $data["data"]["id"];
+                    $status = $data["data"]["status"];
+
+                    $retrait = Retrait::create([
+                        "user_id" => $user->id,
+                        "montant" => $withdawalData['montant'],
+                        "tel" => $withdawalData['tel'],
+                        "date" => now(),
+                    ]);
+
+                    $transaction = $retrait->transactions()->create([
+                        "user_id" => $user->id,
+                        "statut" => $status,
+                        "identifiant" => $trans_id,
+                        "montant" => $withdawalData['montant']
+                    ]);
+
+                    $resPayment = $this->checkTransactionStatus($trans_id);
+
+                    if ($resPayment && $resPayment['data'] === 'SUCCESS') {
+                        $transaction->update([
+                            'statut' => "SUCCESS"
+                        ]);
+
+                        $retrait->update([
+                            'etat' => true
+                        ]);
+
+                        $user->update([
+                            'solde' => $user->solde - $withdawalData['montant']
+                        ]);
+
+                        Log::channel('user_actions')->info('Transaction réussie ', [
+                            'id'           => $transaction->id,
+                            'type_transaction' => $transaction->transactionable_type,
+                            'montant'        => $transaction->montant,
+                            'initiated_by'   => $user ? $user->email : 'unknown',
+                        ]);  
+                    }else{
+                        //Modification du statut de la transaction en PENDING ou FAILED
+                        $transaction->update([
+                            'statut' => $resPayment['data'] ?? "FAILED"
+                        ]);
+
+                        //Log pour la transaction échouée
+                        Log::channel('user_actions')->info('Transaction échouée', [
+                            'id'           => $transaction->id,
+                            'type_transaction' => $transaction->transactionable_type,
+                            'montant'        => $transaction->montant,
+                            'initiated_by'   => $user ? $user->email : 'unknown',
+                        ]); 
+                    }
+                }
+                else
+                {
+                    Log::channel('user_actions')->info('Échec de l\'appel API avec code HTTP : '.$response->body() . $response->status(), $response->headers());
+                    throw new \Exception("Échec de l'appel API avec code HTTP : ".$response->body() . $response->status());
+                }
+                return $transaction;
+            }
+        });
+    }
+
+    // fonction pour générer le auth-code du retrait
+    private function generateAuthcode(): string {
+        $response = Http::withQueryParameters([
+            'i_space_key' => env('NOKASH_I_SPACE_KEY'),
+            'app_space_key' => env('NOKASH_APP_SPACE_KEY'),
+        ])->post('https://api.nokash.app/lapas-on-trans/trans/auth');
+
+        if($response->successful()){
+                $data = $response->json();
+                $auth_code = $data["data"];
+                return $auth_code;
+         }
+        else
+        {
+            throw new \Exception("Échec de l'appel API avec code HTTP : ".$response->body() . $response->status());
+        }
+    }
 }

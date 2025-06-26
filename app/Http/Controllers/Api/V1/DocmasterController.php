@@ -24,7 +24,7 @@ class DocmasterController
     /**
      * @OA\Get(
      *   path="/api/declaration",
-     *   tags={"Docmasters"},
+     *   tags={"Déclarations"},
      *   summary="Lister toutes les déclarations",
      *   description="Nécessite un token Bearer dans l'en-tête Authorization",
      *   security={
@@ -65,7 +65,7 @@ class DocmasterController
     /**
      * @OA\Get(
      *   path="/api/declaration/{id}",
-     *   tags={"Docmasters"},
+     *   tags={"Déclarations"},
      *   summary="Afficher une déclaration",
      *   description="Nécessite un token Bearer dans l'en-tête Authorization",
      *   security={
@@ -110,7 +110,7 @@ class DocmasterController
     /**
      * @OA\Delete(
      *   path="/api/declaration/{id}",
-     *   tags={"Docmasters"},
+     *   tags={"Déclarations"},
      *   summary="Archiver une déclaration",
      *   description="Nécessite un token Bearer dans l'en-tête Authorization",
      *   security={
@@ -149,7 +149,7 @@ class DocmasterController
     /**
      * @OA\Post(
      *   path="/api/declaration/{id}/restore",
-     *   tags={"Docmasters"},
+     *   tags={"Déclarations"},
      *   summary="Restaurer une déclaration",
      *   description="Nécessite un token Bearer dans l'en-tête Authorization",
      *   security={
@@ -188,7 +188,7 @@ class DocmasterController
     /**
      * @OA\Delete(
      *   path="/api/declaration/{id}/force-delete",
-     *   tags={"Docmasters"},
+     *   tags={"Déclarations"},
      *   summary="Suppression définitive d'une déclaration",
      *   description="Nécessite un token Bearer dans l'en-tête Authorization",
      *   security={
@@ -225,7 +225,7 @@ class DocmasterController
     /**
      * @OA\Get(
      *   path="/api/declaration/archived",
-     *   tags={"Docmasters"},
+     *   tags={"Déclarations"},
      *   summary="Lister les déclarations archivées",
      *   description="Nécessite un token Bearer dans l'en-tête Authorization",
      *   security={
@@ -256,7 +256,7 @@ class DocmasterController
 
         return $this->sendResponse(
             [
-            'archived_declarations' => $docmasters['data'],
+            'declarations' => $docmasters['data'],
             'meta' => $docmasters['meta']
             ],
             'Liste des déclarations supprimées récupérée avec succès.'
@@ -271,7 +271,7 @@ class DocmasterController
     /**
      * @OA\Get(
      *   path="/api/declaration/search",
-     *   tags={"Docmasters"},
+     *   tags={"Déclarations"},
      *   summary="Rechercher une déclaration par titre",
      *   description="Nécessite un token Bearer dans l'en-tête Authorization",
      *   security={
@@ -300,7 +300,7 @@ class DocmasterController
         $docmasters = $this->docmasterServices->searchByTitle($titre,$per_page, $page);
         return $this->sendResponse(
             [
-            'docmasters' => $docmasters['data'],
+            'declarations' => $docmasters['data'],
             'meta' => $docmasters['meta']
             ],
             'Liste des déclarations récupérée avec succès.'
@@ -313,7 +313,7 @@ class DocmasterController
     /**
      * @OA\Post(
      *   path="/api/declaration",
-     *   tags={"Docmasters"},
+     *   tags={"Déclarations"},
      *   summary="Déclarer un document trouvé ou perdu",
      *   description="Nécessite un token Bearer dans l'en-tête Authorization",
      *   security={

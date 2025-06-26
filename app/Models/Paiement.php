@@ -9,12 +9,16 @@ class Paiement extends Model
 {
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['id','transaction_id','etat','montant','supprime'];
+    protected $fillable = ['id','transaction_id','etat','montant'];
 
     protected static function booted()
     {
         static::creating(fn($m)=> $m->id = (string) Str::uuid());
     }
+
+    protected $appends = [
+        'user'
+    ];
 
     public function transaction()
     {
@@ -23,6 +27,6 @@ class Paiement extends Model
 
     public function getUserAttribute()
     {
-        return $this->transaction->user;
+        return $this->transaction?->user;
     }
 }

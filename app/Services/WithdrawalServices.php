@@ -2,19 +2,20 @@
 
 namespace App\Services;
 
-use App\Models\Paiement;
+use App\Models\Retrait;
+use App\Models\Transaction;
 use Illuminate\Pagination\Paginator;
 
-class PaymentServices
-{
-    public function getAllUserPayments(int $perPage = 10, ?int $page = null): array{
-        $userId = auth()->user()->id;
+class WithdrawalServices{
+ 
+    public function __construct(
+       protected TransactionServices $transactionServices
+    ){}
+
+    public function getAllUserWithdrawals(int $perPage = 10, ?int $page = null): array{
         $page = $page ?: Paginator::resolveCurrentPage();
 
-        $paginator = Paiement::whereHas('transaction', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })
-        ->with('transaction')->
+        $paginator = Retrait::with('user')->
         paginate(
             $perPage, 
             ['*'],
@@ -32,10 +33,10 @@ class PaymentServices
         ];
     }
 
-    public function getAllPayments(int $perPage = 10, ?int $page = null): array{
+    public function getAllWithdrawals(int $perPage = 10, ?int $page = null): array{
         $page = $page ?: Paginator::resolveCurrentPage();
 
-        $paginator = Paiement::with('transaction')->
+        $paginator = Retrait::
         paginate(
             $perPage, 
             ['*'],
@@ -51,5 +52,18 @@ class PaymentServices
                 'total'        => $paginator->total(),
             ],
         ];
+    }
+
+    public function makeWithdrawal(array $data): ?Transaction
+    {
+        $user = auth()->user();
+        $verifMontant = $data['montant'] <= $user->solde;
+
+        if(!$verifMontant)
+            throw new \Exception("Solde insuffisant pour effectuer le retrait, Veuillez entrer un montant inférieur ou égal au solde : $user->solde !");
+
+        $transaction = $this->transactionServices->initiateWithdrawal($data);
+
+        return $transaction;
     }
 }

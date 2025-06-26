@@ -16,7 +16,6 @@ class CreateTransactionsTable extends Migration
             $table->string('statut', 12);
             $table->decimal('montant', 8, 0);
             $table->string('identifiant');
-            $table->boolean('supprime')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

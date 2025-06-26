@@ -27,7 +27,7 @@ class UserUpdateRequest extends FormRequest
             'prenom' => 'required|string|max:255',
             'email' => 'required|email|exists:users,email',
             'nom_utilisateur' => 'required|string|max:255|exists:users,nom_utilisateur',
-            'tel' => [ 'required', 'string', 'regex:/^\+[1-9]\d{6,14}$/' ],
+            'tel' => [ 'required', 'string', 'regex:/^[1-9]\d{6,14}$/' ],
             'date_naissance' => 'required|date',
             'localisation' => 'nullable|string',
             'infos_paiement' => 'nullable|string',
@@ -53,7 +53,6 @@ class UserUpdateRequest extends FormRequest
             'photo_url.file' => 'La photo de profil doit être une image de type JPG, PNG ou GIF',
             'photo_url.max' => 'La taille du fichier de profil ne doit pas dépasser 5Mo',
             'tel.regex' => 'Le numéro de téléphone doit être au format international.',
-            'tel' => 'Le numéro de téléphone est requis',
         ];
     }
 }

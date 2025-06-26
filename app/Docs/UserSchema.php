@@ -39,7 +39,7 @@ use OpenApi\Annotations as OA;
  *  @OA\Property(
  *    property="tel",
  *    type="string",
- *    example="1234567890"
+ *    example="237690098998"
  *   ),
  *  @OA\Property(
  *    property="date_naissance",

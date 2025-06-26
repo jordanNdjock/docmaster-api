@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
         Admin::factory()->create([
             'nom_utilisateur' => 'Admin',
             'mdp' => 'adminpassword',
-            'tel' => '+23790998778',
+            'tel' => '23790998778',
             'email' => 'admin@example.com',
         ]);
     }

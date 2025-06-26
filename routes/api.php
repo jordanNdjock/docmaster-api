@@ -5,9 +5,13 @@ use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DocmasterController;
 use App\Http\Controllers\Api\V1\DocumentController;
+use App\Http\Controllers\Api\V1\PaymentController;
+use App\Http\Controllers\Api\V1\RetraitController;
 use App\Http\Controllers\Api\V1\StatisticController;
 use App\Http\Controllers\Api\V1\TypeDocumentController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\WithdrawalController;
+use App\Services\WithdrawalServices;
 use Illuminate\Support\Facades\Route;
 
 // Authentification des utilisateurs
@@ -51,6 +55,17 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('declaration/search', [DocmasterController::class, 'search']);
     Route::apiResource('declaration', DocmasterController::class)
         ->only(['index', 'show', 'update', 'destroy', 'store']);
+    
+    /**
+     * Gestion des retraits d'argent
+     */
+    Route::post('retrait', [WithdrawalController::class, 'withdraw']);
+    Route::get('retrait', [WithdrawalController::class, 'index']);
+
+    /**
+     * Gestion des paiements de l'utilisateur
+     */
+    Route::get('paiement', [PaymentController::class, 'index']);
 });
 
 
@@ -110,5 +125,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
     * Gestion des stats
     */
     Route::get('stats', [StatisticController::class, 'getStats']);
+
+    /**
+     *  Gestion des retraits
+     */
+    Route::get('retrait', [WithdrawalController::class, 'indexAdmin']);
+
+    /**
+     * Gestion des paiements
+     */
+    Route::get('paiement', [PaymentController::class, 'indexAdmin']);
+    
 });
 

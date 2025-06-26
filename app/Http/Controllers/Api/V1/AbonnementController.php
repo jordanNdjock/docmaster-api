@@ -182,7 +182,7 @@ class AbonnementController
      *     required=true,
      *     @OA\JsonContent(
      *       @OA\Property(property="montant", type="integer", example="10000"),
-     *       @OA\Property(property="tel", type="string", example="+237678788778"),
+     *       @OA\Property(property="tel", type="string", example="237678788778"),
      *       @OA\Property(property="payment_method", type="string", example="MTN_MOMO | ORANGE_MONEY"),
      *       @OA\Property(property="transactionable_type", type="string", example="abonnement")
      *     )

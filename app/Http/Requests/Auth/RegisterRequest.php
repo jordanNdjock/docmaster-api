@@ -27,7 +27,7 @@ class RegisterRequest extends FormRequest
             'email' => 'required|email|unique:users,email',
             'mdp' => 'required|string|min:8|confirmed',
             'nom_utilisateur' => 'required|string|max:255|unique:users,nom_utilisateur',
-            'tel' => [ 'required', 'string', 'regex:/^\+[1-9]\d{6,14}$/' ],
+            'tel' => [ 'required', 'string', 'regex:/^[1-9]\d{6,14}$/' ],
             'date_naissance' => 'required|date',
             'localisation' => 'nullable|string',
             'infos_paiement' => 'nullable|string',

@@ -40,7 +40,7 @@ class DocmasterRequest extends FormRequest
                 'titre_document'   => $documentRules['titre_document'] ?? 'required|string',
                 'date_expiration'  => $documentRules['date_expiration'],
                 'nom_trouveur'     => 'required|string',
-                'tel_trouveur'     => 'required|string|regex:/^\+[1-9]\d{6,14}$/',
+                'tel_trouveur'     => 'required|string|regex:/^[1-9]\d{6,14}$/',
                 'infos_docs'       => 'nullable|string',
             ]);
         }

@@ -175,15 +175,18 @@ class AbonnementServices
      * @param string $id
      * @return void
      */
-    public function subscribeToAbonnement(string $id, array $data): ?Transaction
+    public function subscribeToAbonnement(string $id, array $data): Transaction
     {
         $abonnement = Abonnement::active()->findOrFail($id);
         $user = auth()->user();
-        $verif = $data['montant'] === $abonnement->montant;
+        $verifMontant = $data['montant'] === $abonnement->montant;
+        $verifType = $data['transactionable_type'] === "abonnement";
 
-        if(!$verif)
+        if(!$verifMontant)
             throw new Exception('Montant de l\'abonnement incorrect, Veuillez entrer un montant correct !');
 
+        if(!$verifType)
+            throw new Exception('Type de transaction incorrect, Veuillez entrer \'abonnement\' comme type de transaction !');
 
         $abonnementUser = AbonnementUser::where('user_id', $user->id)->first();
 

@@ -10,7 +10,7 @@ class Transaction extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
-        'id','user_id','transactionable_id','transactionable_type','statut','montant','identifiant','supprime'
+        'id','user_id','transactionable_id','transactionable_type','statut','montant','identifiant'
     ];
 
     protected static function booted()

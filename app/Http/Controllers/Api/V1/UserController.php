@@ -29,7 +29,7 @@ class UserController
         $users = $this->userServices->getAllUsers($per_page, $page);
         return $this->sendResponse(
             [
-            'users' => $users['data'],
+            'utilisateurs' => $users['data'],
             'meta' => $users['meta']
             ],
             'Liste des utilisateurs récupérée avec succès.'

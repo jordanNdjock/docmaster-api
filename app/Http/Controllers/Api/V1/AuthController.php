@@ -72,7 +72,7 @@ class AuthController extends Controller
 
             return $this->sendResponse(
                 [
-                    'user'         => $user,
+                    'utilisateur'         => $user,
                     'access_token' => $plainTextToken,
                 ],
                 'Connexion réussie.',

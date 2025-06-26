@@ -59,7 +59,7 @@ class DocumentController
         $documents = $this->documentServices->getAllUserDocuments($per_page, $page);
         return $this->sendResponse(
             [
-            'user_documents' => $documents['data'],
+            'documents' => $documents['data'],
             'meta' => $documents['meta']
             ],
             'Liste des documents de l\'utilisateur récupérée avec succès.'
@@ -390,7 +390,7 @@ class DocumentController
 
         return $this->sendResponse(
             [
-            'archived_documents' => $documents['data'],
+            'documents' => $documents['data'],
             'meta' => $documents['meta']
             ],
             'Liste des documents supprimés récupérée avec succès.'

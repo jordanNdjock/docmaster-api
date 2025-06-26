@@ -154,7 +154,7 @@ class TypeDocumentController
 
         return $this->sendResponse(
             [
-            'archived_type_documents' => $typeDocuments['data'],
+            'type_documents' => $typeDocuments['data'],
             'meta' => $typeDocuments['meta']
             ],
             'Liste des types de documents supprimés récupérée avec succès.'

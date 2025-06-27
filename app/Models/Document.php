@@ -51,8 +51,8 @@ class Document extends Model
         return $query->where('supprime', true);
     }
     
-    public function scopeUser($query){
-        return $query->where('user_id', $this->user_id);
+    public function scopeUsers($query, $userId){
+        return $query->where('user_id', $userId);
     }
 
     public function getCreatedAtHumanAttribute()

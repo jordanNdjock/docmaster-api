@@ -44,7 +44,7 @@ class DocumentServices
     {
         $page = $page ?: Paginator::resolveCurrentPage();
 
-        $paginator = Document::active()->with('user')
+        $paginator = Document::active()->users(auth()->id())
             ->paginate(
                 $per_page,
                 ['*'],

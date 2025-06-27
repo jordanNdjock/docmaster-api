@@ -41,7 +41,7 @@ class TransactionServices
     {
         $page = $page ?: Paginator::resolveCurrentPage();
 
-        $paginator = Transaction::with('user')->
+        $paginator = Transaction::users(auth()->id())->
         paginate(
             $perPage, 
             ['*'],

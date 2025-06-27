@@ -32,4 +32,7 @@ class Retrait extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function scopeUsers($query, $userId){
+        return $query->where('user_id', $userId);
+    }
 }

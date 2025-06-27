@@ -15,7 +15,7 @@ class WithdrawalServices{
     public function getAllUserWithdrawals(int $perPage = 10, ?int $page = null): array{
         $page = $page ?: Paginator::resolveCurrentPage();
 
-        $paginator = Retrait::with('user')->
+        $paginator = Retrait::users(auth()->id())->
         paginate(
             $perPage, 
             ['*'],

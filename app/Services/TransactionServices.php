@@ -7,6 +7,7 @@ use App\Models\Docmaster;
 use App\Models\Paiement;
 use App\Models\Retrait;
 use App\Models\Transaction;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -14,6 +15,50 @@ use Illuminate\Support\Str;
 
 class TransactionServices
 {
+    public function getAllTransactions(int $perPage = 10, ?int $page = null): array
+    {
+        $page = $page ?: Paginator::resolveCurrentPage();
+
+        $paginator = Transaction::
+        paginate(
+            $perPage, 
+            ['*'],
+            'page',
+            $page
+        );
+        return [
+            'data' => $paginator->items(),
+            'meta' => [
+                'current_page' => $paginator->currentPage(),
+                'last_page'    => $paginator->lastPage(),
+                'per_page'     => $paginator->perPage(),
+                'total'        => $paginator->total(),
+            ],
+        ];
+    }
+
+    public function getAllUserTransactions(int $perPage = 10, ?int $page = null): array
+    {
+        $page = $page ?: Paginator::resolveCurrentPage();
+
+        $paginator = Transaction::with('user')->
+        paginate(
+            $perPage, 
+            ['*'],
+            'page',
+            $page
+        );
+        return [
+            'data' => $paginator->items(),
+            'meta' => [
+                'current_page' => $paginator->currentPage(),
+                'last_page'    => $paginator->lastPage(),
+                'per_page'     => $paginator->perPage(),
+                'total'        => $paginator->total(),
+            ],
+        ];
+    }
+
     // fonction d'initiation de transaction de paiement
     public function initiateTransaction(array $transactionData, string $id): Transaction
     {

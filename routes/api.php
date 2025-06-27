@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\DocumentController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\RetraitController;
 use App\Http\Controllers\Api\V1\StatisticController;
+use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Controllers\Api\V1\TypeDocumentController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\WithdrawalController;
@@ -66,6 +67,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
      * Gestion des paiements de l'utilisateur
      */
     Route::get('paiement', [PaymentController::class, 'index']);
+
+    /**
+     * Gestion des transactions
+     */
+    Route::get('transaction', [TransactionController::class, 'index']);
 });
 
 
@@ -135,6 +141,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function () {
      * Gestion des paiements
      */
     Route::get('paiement', [PaymentController::class, 'indexAdmin']);
+
+    /**
+     * Gestion des transactions
+     */
+    Route::get('transaction', [TransactionController::class, 'indexAdmin']);
     
 });
 

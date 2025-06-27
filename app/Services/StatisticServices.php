@@ -22,9 +22,9 @@ class StatisticServices{
             'total_abonnements_utilisateurs' => AbonnementUser::count(),
             'total_declarations' => Docmaster::active()->count(),
             'total_utilisateurs' => User::active()->count(),
-            'total_paiement' => Paiement::count(),
+            'total_paiements' => Paiement::count(),
             'total_transactions' => Transaction::count(),
-            'total_retraits' => Retrait::count(),
+            'total_retraits' => Retrait::where('etat', true)->count(),
         ];
     }
 }

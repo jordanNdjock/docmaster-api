@@ -1388,6 +1388,75 @@
                 ]
             }
         },
+        "/api/transaction": {
+            "get": {
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Récupération des transactions de l'utilisateur connecté",
+                "description": "Nécessite un token Bearer dans l'en-tête Authorization",
+                "operationId": "16db77321439857169e397ecbfa55780",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des transactions utilisateur récupérée avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "transactions": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Transaction"
+                                                    }
+                                                },
+                                                "meta": {
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Liste des transactions de l'utilisateur récupérée avec succès."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/retrait": {
             "get": {
                 "tags": [
@@ -1743,6 +1812,41 @@
                 },
                 "type": "object"
             },
+            "Transaction": {
+                "title": "Transaction",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "uuid-tr_01ab23"
+                    },
+                    "user_id": {
+                        "type": "string",
+                        "example": "uuid-user-1"
+                    },
+                    "transactionable_id": {
+                        "type": "integer",
+                        "example": "uuid-transactionable-1"
+                    },
+                    "transactionable_type": {
+                        "type": "string",
+                        "example": "App\\Models\\Retrait"
+                    },
+                    "statut": {
+                        "type": "string",
+                        "example": "SUCCESS"
+                    },
+                    "montant": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 2500
+                    },
+                    "identifiant": {
+                        "type": "string",
+                        "example": "TXN_0012421412"
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "title": "User",
                 "description": "Représentation d'un utilisateur",
@@ -1875,6 +1979,10 @@
         {
             "name": "Paiements",
             "description": "Paiements"
+        },
+        {
+            "name": "Transactions",
+            "description": "Transactions"
         },
         {
             "name": "Retraits",
